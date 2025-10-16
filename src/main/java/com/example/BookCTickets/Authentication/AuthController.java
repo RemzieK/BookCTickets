@@ -26,4 +26,9 @@ public class AuthController {
         authService.register(user);
         return "redirect:/login";
     }
+
+    @GetMapping("/login")
+    public String showLoginForm() {
+        return "login"; // This should match login.html in templates
+    }
 }
