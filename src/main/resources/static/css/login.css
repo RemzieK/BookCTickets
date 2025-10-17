@@ -1,8 +1,7 @@
-/* General layout */
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #2e2e2e; /* Dark grey background */
+    background: #2e2e2e;
 }
 
 .login-container {
@@ -14,42 +13,43 @@ body {
 
 .login-card {
     display: flex;
-    width: 1000px;  /* Increased width */
-    max-width: 95%; /* Responsive for smaller screens */
+    width: 900px;
+    height: 650px;
+    max-width: 95%;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.4); /* Slightly stronger shadow */
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
 }
 
 /* Left side */
 .login-left {
     background: #333;
     color: #fff;
-    padding: 50px; /* Bigger padding */
+    padding: 40px;
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .login-left .logo {
-    width: 140px; /* Slightly bigger logo */
-    margin-bottom: 25px;
+    width: 200px;
+    margin-bottom: 30px;
 }
 
 .login-left h2 {
-    margin: 0 0 12px;
+    margin: 0 0 0px;
 }
 
 .login-left p {
-    margin-bottom: 25px;
+    margin-bottom: 65px;
 }
 
 .login-left input {
     width: 100%;
-    padding: 14px; /* Slightly bigger input */
-    margin: 10px 0;
+    padding: 14px;
+    margin: 8px 0;
     border-radius: 5px;
     border: 1px solid #ccc;
     box-sizing: border-box;
@@ -57,7 +57,7 @@ body {
 
 .btn-login {
     width: 100%;
-    padding: 14px; /* Bigger button */
+    padding: 14px;
     background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
     border: none;
     color: #fff;
@@ -90,7 +90,7 @@ body {
 
 .btn-create {
     border: 1px solid #f06292;
-    padding: 6px 12px; /* Slightly bigger */
+    padding: 6px 12px;
     border-radius: 5px;
     text-decoration: none;
     color: #f06292;
@@ -109,11 +109,15 @@ body {
     padding: 50px;
     flex: 1;
     display: flex;
+    flex-direction: column; /* ✅ stack vertically */
     align-items: center;
     justify-content: center;
     text-align: center;
 }
 
+.login-right .right-content {
+    max-width: 80%;
+}
 
 .login-right h2 {
     margin-top: 0;

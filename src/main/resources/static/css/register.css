@@ -1,63 +1,63 @@
-/* General layout */
 body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #2e2e2e; /* Dark grey background */
+    background: #2e2e2e;
 }
 
-.login-container {
+.register-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
-.login-card {
+.register-card {
     display: flex;
-    width: 1000px;  /* Increased width */
-    max-width: 95%; /* Responsive for smaller screens */
+    width: 900px;
+    height: 650px;
+    max-width: 95%;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.4); /* Stronger shadow */
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
 }
 
 /* Left side */
-.login-left {
+.register-left {
     background: #333;
     color: #fff;
-    padding: 50px; /* Bigger padding */
+    padding: 40px;
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
-.login-left .logo {
-    width: 140px; /* Slightly bigger logo */
-    margin-bottom: 25px;
+.register-left .logo {
+    width: 200px;
+    margin-bottom: 20px;
 }
 
-.login-left h2 {
-    margin: 0 0 12px;
+.register-left h2 {
+    margin: 0 0 0px;
 }
 
-.login-left p {
-    margin-bottom: 25px;
+.register-left p {
+    margin-bottom: 15px;
 }
 
-.login-left input {
+.register-left input {
     width: 100%;
-    padding: 14px; /* Slightly bigger input */
-    margin: 8px 0; /* Spacing for multiple fields */
+    padding: 14px;
+    margin: 8px 0;
     border-radius: 5px;
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
 
-.btn-login {
+.btn-register {
     width: 100%;
-    padding: 14px; /* Bigger button */
+    padding: 14px;
     background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
     border: none;
     color: #fff;
@@ -67,7 +67,7 @@ body {
     margin: 12px 0;
 }
 
-.btn-login:hover {
+.btn-register:hover {
     opacity: 0.9;
 }
 
@@ -90,7 +90,7 @@ body {
 
 .btn-create {
     border: 1px solid #f06292;
-    padding: 6px 12px; /* Slightly bigger */
+    padding: 6px 12px;
     border-radius: 5px;
     text-decoration: none;
     color: #f06292;
@@ -103,25 +103,25 @@ body {
 }
 
 /* Right side */
-.login-right {
+.register-right {
     background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
     color: #fff;
     padding: 50px;
     flex: 1;
     display: flex;
-    align-items: center; /* vertical centering */
-    justify-content: center; /* horizontal centering */
-    text-align: center; /* center the text */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
-.login-right .right-content {
-    max-width: 80%; /* optional: prevent text from stretching too much */
+.register-right .right-content {
+    max-width: 80%;
 }
 
-.login-right h2 {
+.register-right h2 {
     margin-top: 0;
 }
 
-.login-right p {
+.register-right p {
     line-height: 1.6;
 }

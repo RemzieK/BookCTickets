@@ -10,12 +10,12 @@
     <div class="login-card">
         <!-- Left side -->
         <div class="login-left">
-            <img src="/assets/logo.png" alt="Logo" class="logo">
-            <h2>We are The Lotus Team</h2>
+            <img th:src="@{/assets/logo.png}" alt="Logo" class="logo">
+            <h2>Log in</h2>
             <p>Please login to your account</p>
-            <form id="loginForm">
-                <input type="text" placeholder="Username" id="username" required>
-                <input type="password" placeholder="Password" id="password" required>
+            <form th:action="@{/login}" method="post">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
                 <button type="submit" class="btn-login">LOG IN</button>
                 <a href="#" class="forgot">Forgot password?</a>
             </form>
@@ -27,12 +27,10 @@
 
         <!-- Right side -->
         <div class="login-right">
-            <h2>We are more than just a company</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <h2>BookCTickets</h2>
+            <p>Sign in into your account to book tickets, for the newest showtimes today with exclusive offers.</p>
         </div>
     </div>
 </div>
-
-<script th:src="@{/js/forms.js}"></script>
 </body>
 </html>

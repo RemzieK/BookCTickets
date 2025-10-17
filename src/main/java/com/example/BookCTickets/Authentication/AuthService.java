@@ -23,15 +23,10 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-    // Simple registration
     public User register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.User);
         return userRepository.save(user);
     }
 
-    // Simple login check
-    public void login(String username, String password) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-    }
 }
