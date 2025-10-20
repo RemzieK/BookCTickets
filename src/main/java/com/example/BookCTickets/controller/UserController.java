@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/admin/users")
 @CrossOrigin(origins="*")
 public class UserController {
     @Autowired

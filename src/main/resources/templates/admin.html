@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}" />
+</head>
+<body>
+<div class="admin-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <img th:src="@{/assets/logo-w.png}" alt="" style="width: 180px;">
+        </div>
+        <nav>
+            <ul>
+                <li class="active" onclick="openTab('dashboard')">Dashboard</li>
+                <li onclick="openTab('users')">Users</li>
+                <li onclick="openTab('movies')">Movies</li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="tab-content active">
+            <h1>Dashboard</h1>
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <p th:text="${userCount}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Movies</h3>
+                    <p th:text="${movieCount}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Tickets Sold</h3>
+                    <p th:text="${ticketCount}">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Users -->
+        <section id="users" class="tab-content">
+            <h1>Users</h1>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Tickets Bought</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td th:text="${ticketCounts[user.id]}">0</td>
+                        <td th:text="${user.role}"></td>
+                        <td>
+                            <a th:href="@{'/admin/users/delete/' + ${user.id}}" class="btn-delete">Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Movies -->
+        <section id="movies" class="tab-content">
+            <h1>Movies</h1>
+            <button class="btn-create" onclick="openModal('addMovieModal')">Add Movie</button>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Genre</th>
+                        <th>Price</th>
+                        <th>Thumbnail</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="movie : ${movies}"
+                        th:data-id="${movie.id}"
+                        th:data-title="${movie.title}"
+                        th:data-description="${movie.description}"
+                        th:data-actors="${movie.actors}"
+                        th:data-genre="${movie.genre}"
+                        th:data-ticket-price="${movie.ticketPrice}"
+                        th:data-hours="${movie.hours}"
+                        th:data-room="${movie.room}"
+                        th:data-language="${movie.language}"
+                        th:data-age-restriction="${movie.ageRestriction}"
+                        th:data-image-url="${movie.imageUrl}">
+
+                        <td th:text="${movie.id}"></td>
+                        <td th:text="${movie.title}"></td>
+                        <td th:text="${movie.genre}"></td>
+                        <td th:text="${movie.ticketPrice}"></td>
+                        <td>
+                            <img th:if="${movie.imageUrl != null}" th:src="${movie.imageUrl}"
+                                 style="width:50px;height:50px;object-fit:cover;border-radius:5px;">
+                        </td>
+                        <td>
+                            <button class="btn-delete" onclick="showInfo(this)">Info</button>
+                            <button class="btn-delete" onclick="showEdit(this)">Edit</button>
+                            <a th:href="@{'/admin/movies/delete/' + ${movie.id}}" class="btn-delete">Delete</a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- Add Movie Modal -->
+<div id="addMovieModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('addMovieModal')">&times;</span>
+        <h2>Add Movie</h2>
+        <form th:action="@{/admin/movies/save}" method="post" enctype="multipart/form-data">
+            <input type="text" name="title" placeholder="Title" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <input type="text" name="actors" placeholder="Actors" required>
+            <select name="genre" required>
+                <option value="">Select Genre</option>
+                <option>Action</option>
+                <option>Comedy</option>
+                <option>Drama</option>
+                <option>Horror</option>
+                <option>Romance</option>
+            </select>
+            <input type="number" name="ticketPrice" placeholder="Ticket Price" step="0.01" required>
+            <input type="text" name="hours" placeholder="Show Hours (e.g., 10:00,14:00)" required>
+            <input type="text" name="room" placeholder="Cinema Room" required>
+            <input type="text" name="language" placeholder="Language" required>
+            <input type="text" name="ageRestriction" placeholder="Age Restriction" required>
+            <input type="file" name="imageFile" accept="image/*">
+            <button type="submit" class="btn-create">Add Movie</button>
+        </form>
+    </div>
+</div>
+
+<!-- Info Modal -->
+<div id="infoMovieModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('infoMovieModal')">&times;</span>
+        <h2>Movie Info</h2>
+        <img id="info-image" style="width:100%;max-height:300px;object-fit:cover;border-radius:10px;margin-bottom:15px;display:none;">
+        <div class="movie-info-fields">
+            <label>Title</label><input type="text" id="info-title" readonly>
+            <label>Description</label><textarea id="info-description" readonly></textarea>
+            <label>Actors</label><input type="text" id="info-actors" readonly>
+            <label>Genre</label><input type="text" id="info-genre" readonly>
+            <label>Ticket Price</label><input type="number" id="info-ticketPrice" readonly>
+            <label>Hours</label><input type="text" id="info-hours" readonly>
+            <label>Room</label><input type="text" id="info-room" readonly>
+            <label>Language</label><input type="text" id="info-language" readonly>
+            <label>Age Restriction</label><input type="text" id="info-ageRestriction" readonly>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div id="editMovieModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('editMovieModal')">&times;</span>
+        <h2>Edit Movie</h2>
+        <img id="edit-image-preview" style="width:100%;max-height:200px;object-fit:cover;margin-bottom:10px;display:none;">
+        <form th:action="@{/admin/movies/save}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" id="edit-id">
+            <label>Title</label><input type="text" name="title" id="edit-title" required>
+            <label>Description</label><textarea name="description" id="edit-description" required></textarea>
+            <label>Actors</label><input type="text" name="actors" id="edit-actors" required>
+            <label>Genre</label>
+            <select name="genre" id="edit-genre" required>
+                <option value="">Select Genre</option>
+                <option>Action</option>
+                <option>Comedy</option>
+                <option>Drama</option>
+                <option>Horror</option>
+                <option>Romance</option>
+            </select>
+            <label>Ticket Price</label><input type="number" name="ticketPrice" id="edit-ticketPrice" step="0.01" required>
+            <label>Hours</label><input type="text" name="hours" id="edit-hours" required>
+            <label>Room</label><input type="text" name="room" id="edit-room" required>
+            <label>Language</label><input type="text" name="language" id="edit-language" required>
+            <label>Age Restriction</label><input type="text" name="ageRestriction" id="edit-ageRestriction" required>
+            <input type="file" name="imageFile" accept="image/*" onchange="previewEditImage(event)">
+            <button type="submit" class="btn-delete">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

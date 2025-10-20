@@ -35,26 +35,19 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/**",           // Allow everything
                                 "/register",
                                 "/login",
-                                "/index",
                                 "/assets/**",
                                 "/css/**",
                                 "/js/**",
                                 "/images/**"
                         ).permitAll()
-                        .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")  // Spring Security endpoint for POST login
-                        .defaultSuccessUrl("/index", true)
-                        .failureUrl("/login?error=true") // optional
-                        .permitAll()
-                )
-                .logout(logout -> logout.permitAll())
-                .userDetailsService(userDetailsService); // <--- wire it here
+                .formLogin().disable()   // disable login form for now
+                .logout().disable();
 
         return http.build();
     }
+
 }
