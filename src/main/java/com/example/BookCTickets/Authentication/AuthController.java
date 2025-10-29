@@ -22,24 +22,21 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
     }
 
-    // Display registration form
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("user", new User());
         return "register";
     }
 
-    // Handle registration
     @PostMapping("/register")
     public String registerUser(User user) {
-        authService.register(user); // saves user with encoded password
-        return "redirect:/login";   // let the user log in via Spring Security form
+        authService.register(user);
+        return "redirect:/login";
     }
 
 
-    // Display login form
     @GetMapping("/login")
     public String showLoginForm() {
-        return "login"; // handled automatically by Spring Security on POST /login
+        return "login";
     }
 }

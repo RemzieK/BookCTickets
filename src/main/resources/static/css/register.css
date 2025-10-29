@@ -21,7 +21,6 @@ body {
     box-shadow: 0 12px 30px rgba(0,0,0,0.4);
 }
 
-/* Left side */
 .register-left {
     background: #333;
     color: #fff;
@@ -102,7 +101,6 @@ body {
     color: white;
 }
 
-/* Right side */
 .register-right {
     background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
     color: #fff;

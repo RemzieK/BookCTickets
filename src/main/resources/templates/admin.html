@@ -8,7 +8,6 @@
 <body>
 <div class="admin-container">
 
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
             <img th:src="@{/assets/logo-w.png}" alt="" style="width: 180px;">
@@ -22,10 +21,8 @@
         </nav>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content">
 
-        <!-- Dashboard -->
         <section id="dashboard" class="tab-content active">
             <h1>Dashboard</h1>
             <div class="stats">
@@ -44,7 +41,6 @@
             </div>
         </section>
 
-        <!-- Users -->
         <section id="users" class="tab-content">
             <h1>Users</h1>
             <div class="table-wrapper">
@@ -75,7 +71,6 @@
             </div>
         </section>
 
-        <!-- Movies -->
         <section id="movies" class="tab-content">
             <h1>Movies</h1>
             <button class="btn-create" onclick="openModal('addMovieModal')">Add Movie</button>
@@ -128,7 +123,6 @@
     </main>
 </div>
 
-<!-- Add Movie Modal -->
 <div id="addMovieModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('addMovieModal')">&times;</span>
@@ -140,6 +134,10 @@
             <select name="genre" required>
                 <option value="">Select Genre</option>
                 <option>Action</option>
+                <option>Adventure</option>
+                <option>Anime</option>
+                <option>Fantasy</option>
+                <option>Triller</option>
                 <option>Comedy</option>
                 <option>Drama</option>
                 <option>Horror</option>
@@ -156,7 +154,6 @@
     </div>
 </div>
 
-<!-- Info Modal -->
 <div id="infoMovieModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('infoMovieModal')">&times;</span>
@@ -176,7 +173,6 @@
     </div>
 </div>
 
-<!-- Edit Modal -->
 <div id="editMovieModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal('editMovieModal')">&times;</span>

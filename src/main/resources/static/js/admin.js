@@ -1,4 +1,3 @@
-// Open/Close modals
 function openModal(id) {
     document.getElementById(id).style.display = 'block';
 }
@@ -6,7 +5,6 @@ function closeModal(id) {
     document.getElementById(id).style.display = 'none';
 }
 
-// Tabs
 function openTab(tabName) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.getElementById(tabName).classList.add('active');
@@ -15,7 +13,6 @@ function openTab(tabName) {
     document.querySelector(`.sidebar nav ul li[onclick="openTab('${tabName}')"]`).classList.add('active');
 }
 
-// Info Modal
 function openInfoModal(id, title, description, actors, genre, ticketPrice, hours, room, language, ageRestriction, imageUrl) {
     const modal = document.getElementById('infoMovieModal');
     modal.querySelector('#info-title').value = title;
@@ -37,7 +34,6 @@ function openInfoModal(id, title, description, actors, genre, ticketPrice, hours
     modal.style.display = 'block';
 }
 
-// Edit Modal
 function openEditModal(id, title, description, actors, genre, ticketPrice, hours, room, language, ageRestriction, imageUrl) {
     const modal = document.getElementById('editMovieModal');
     modal.querySelector('#edit-id').value = id;
@@ -60,13 +56,12 @@ function openEditModal(id, title, description, actors, genre, ticketPrice, hours
     modal.style.display = 'block';
 }
 
-// Preview new image in edit modal
 function previewEditImage(event){
     const img = document.getElementById('edit-image-preview');
     img.src = URL.createObjectURL(event.target.files[0]);
     img.style.display = 'block';
 }
-// Info modal
+
 function showInfo(button) {
     const row = button.closest('tr');
     openInfoModal(
@@ -84,7 +79,6 @@ function showInfo(button) {
     );
 }
 
-// Edit modal
 function showEdit(button) {
     const row = button.closest('tr');
     openEditModal(
@@ -105,6 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const tab = urlParams.get('tab');
     if(tab) {
-        openTab(tab); // open the tab from the URL
+        openTab(tab);
     }
 });

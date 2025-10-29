@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link th:href="@{https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
+
+    <title>BookCTickets</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" />
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" th:href="@{/css/fontawesome.css}" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{https://unpkg.com/swiper@7/swiper-bundle.min.css}" />
+</head>
+
+<body>
+
+<!-- ***** Preloader Start ***** -->
+<div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+        <span class="dot"></span>
+        <div class="dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+<!-- ***** Preloader End ***** -->
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a th:href="@{/index.html}" class="logo">
+                        <img th:src="@{/assets/logo-w.png}" alt="" style="width: 180px;">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="/index" class="active">Home</a></li>
+                        <li><a href="/movies">Movies</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/login">Sign In</a></li>
+                    </ul>
+                    <a class='menu-trigger'><span>Menu</span></a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
+
+<div class="main-banner">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 align-self-center">
+                <div class="caption header-text">
+                    <h6>Welcome to BookCTickets</h6>
+                    <h2>BEST BOOKING CINEMA TICKETS SITE!</h2>
+                    <p>Our cinema booking platform makes it easy to browse the latest movies, choose your preferred showtime, and book your favorite seats in just a few clicks. Register Now!</p>
+                    <div class="search-input">
+                        <form id="search" action="#">
+                            <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword" onkeypress="handle" />
+                            <button role="button">Search Now</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 offset-lg-2">
+                <div class="right-image">
+                    <img th:src="@{/assets/image.png}" alt="image">
+                    <span class="offer">-40%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <a href="#">
+                    <div class="item">
+                        <div class="image">
+                            <img th:src="@{/assets/tickets.png}" alt="tickets" style="max-width: 44px;">
+                        </div>
+                        <h4>Easy Booking</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a th:href="@{#}">
+                    <div class="item">
+                        <div class="image">
+                            <img th:src="@{/assets/seat.png}" alt="seat" style="max-width: 44px;">
+                        </div>
+                        <h4>Seat Selection</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a th:href="@{#}">
+                    <div class="item">
+                        <div class="image">
+                            <img th:src="@{/assets/pay.png}" alt="pay" style="max-width: 44px;">
+                        </div>
+                        <h4>Secure Payments</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <a th:href="@{#}">
+                    <div class="item">
+                        <div class="image">
+                            <img th:src="@{/assets/movies.png}" alt="movies" style="max-width: 44px;">
+                        </div>
+                        <h4>Newest Movies</h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section trending">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="section-heading">
+                    <h6>Trending</h6>
+                    <h2>Trending Movies</h2>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="main-button">
+                    <a th:href="@{/movies.html}">View All</a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="item">
+                    <div class="thumb">
+                        <a th:href="@{/about.html}"><img th:src="@{/assets/trending-01.jpg}" alt=""></a>
+                        <span class="price"><em>$28</em>$20</span>
+                    </div>
+                    <div class="down-content">
+                        <span class="category">Action</span>
+                        <h4>Assassin Creed</h4>
+                        <a th:href="@{/about.html}"><i class="fa fa-shopping-bag"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="item">
+                    <div class="thumb">
+                        <a th:href="@{/about.html}"><img th:src="@{/assets/trending-02.jpg}" alt=""></a>
+                        <span class="price">$44</span>
+                    </div>
+                    <div class="down-content">
+                        <span class="category">Action</span>
+                        <h4>Assassin Creed</h4>
+                        <a th:href="@{/about.html}"><i class="fa fa-shopping-bag"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="item">
+                    <div class="thumb">
+                        <a th:href="@{/about.html}"><img th:src="@{/assets/trending-03.jpg}" alt=""></a>
+                        <span class="price"><em>$64</em>$44</span>
+                    </div>
+                    <div class="down-content">
+                        <span class="category">Action</span>
+                        <h4>Assassin Creed</h4>
+                        <a th:href="@{/about.html}"><i class="fa fa-shopping-bag"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="item">
+                    <div class="thumb">
+                        <a th:href="@{/about.html}"><img th:src="@{/assets/trending-04.jpg}" alt=""></a>
+                        <span class="price">$32</span>
+                    </div>
+                    <div class="down-content">
+                        <span class="category">Action</span>
+                        <h4>Assassin Creed</h4>
+                        <a th:href="@{/about.html}"><i class="fa fa-shopping-bag"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section most-played">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="section-heading">
+                    <h6>TOP MOVIES</h6>
+                    <h2>Most Watched</h2>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="main-button">
+                    <a th:href="@{/movies.html}">View All</a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6 col-sm-6" th:each="i : ${#numbers.sequence(1,6)}">
+                <div class="item">
+                    <div class="thumb">
+                        <a th:href="@{/about.html}">
+                            <img th:src="@{/assets/top-game-0${i}.jpg|}" alt="">
+                        </a>
+                    </div>
+                    <div class="down-content">
+                        <span class="category">Adventure</span>
+                        <h4>Assassin Creed</h4>
+                        <a th:href="@{/about.html}">Explore</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="col-lg-12">
+            <p>Copyright © 2025 BookCTickets. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/isotope.min.js}"></script>
+<script th:src="@{/js/owl-carousel.js}"></script>
+<script th:src="@{/js/counter.js}"></script>
+<script th:src="@{/js/custom.js}"></script>
+
+</body>
+</html>

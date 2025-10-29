@@ -35,8 +35,11 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/**",           // Allow everything
+                                "/**",
                                 "/register",
+                                "/index",
+                                "/about",
+                                "/movies",
                                 "/login",
                                 "/assets/**",
                                 "/css/**",
@@ -44,7 +47,7 @@ public class SecurityConfig {
                                 "/images/**"
                         ).permitAll()
                 )
-                .formLogin().disable()   // disable login form for now
+                .formLogin().disable()
                 .logout().disable();
 
         return http.build();

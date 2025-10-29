@@ -40,21 +40,17 @@ public class AdminController {
                             @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
         if (!imageFile.isEmpty()) {
-            // Clean the original filename to avoid path issues
             String originalFilename = Paths.get(imageFile.getOriginalFilename()).getFileName().toString();
             String filename = System.currentTimeMillis() + "_" + originalFilename;
 
-            // Absolute path to uploads folder
             Path uploadDir = Paths.get("").toAbsolutePath().resolve("uploads");
             if (!Files.exists(uploadDir)) {
                 Files.createDirectories(uploadDir);
             }
 
-            // Save the file
             Path filePath = uploadDir.resolve(filename);
             Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            // Store URL for Thymeleaf
             movie.setImageUrl("/uploads/" + filename);
         }
 
