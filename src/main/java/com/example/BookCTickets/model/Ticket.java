@@ -20,6 +20,11 @@ public class Ticket {
     @ManyToOne
     private Movie movie;
 
+    private String seat;
+    private String hour;
+
+    private Double price;
     private int quantity;
 }
+
 

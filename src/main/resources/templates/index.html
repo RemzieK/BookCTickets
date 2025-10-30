@@ -15,6 +15,8 @@
     <link rel="stylesheet" th:href="@{/css/fontawesome.css}" />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <link rel="stylesheet" th:href="@{https://unpkg.com/swiper@7/swiper-bundle.min.css}" />
+
+
 </head>
 
 <body>
@@ -38,20 +40,16 @@
         <div class="row">
             <div class="col-12">
                 <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
-                    <a th:href="@{/index.html}" class="logo">
+                    <a th:href="@{/index}" class="logo">
                         <img th:src="@{/assets/logo-w.png}" alt="" style="width: 180px;">
                     </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
                     <ul class="nav">
-                        <li><a href="/index" class="active">Home</a></li>
-                        <li><a href="/movies">Movies</a></li>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/login">Sign In</a></li>
+                        <li><a th:href="@{/index}" class="active">Home</a></li>
+                        <li><a th:href="@{/movies}">Movies</a></li>
+                        <li><a th:href="@{/about}">About Us</a></li>
+                        <li><a th:href="@{/login}">Sign In</a></li>
                     </ul>
                     <a class='menu-trigger'><span>Menu</span></a>
-                    <!-- ***** Menu End ***** -->
                 </nav>
             </div>
         </div>
@@ -69,7 +67,7 @@
                     <p>Our cinema booking platform makes it easy to browse the latest movies, choose your preferred showtime, and book your favorite seats in just a few clicks. Register Now!</p>
                     <div class="search-input">
                         <form id="search" action="#">
-                            <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword" onkeypress="handle" />
+                            <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword" />
                             <button role="button">Search Now</button>
                         </form>
                     </div>
@@ -99,7 +97,7 @@
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a th:href="@{#}">
+                <a href="#">
                     <div class="item">
                         <div class="image">
                             <img th:src="@{/assets/seat.png}" alt="seat" style="max-width: 44px;">
@@ -109,7 +107,7 @@
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a th:href="@{#}">
+                <a href="#">
                     <div class="item">
                         <div class="image">
                             <img th:src="@{/assets/pay.png}" alt="pay" style="max-width: 44px;">
@@ -119,7 +117,7 @@
                 </a>
             </div>
             <div class="col-lg-3 col-md-6">
-                <a th:href="@{#}">
+                <a href="#">
                     <div class="item">
                         <div class="image">
                             <img th:src="@{/assets/movies.png}" alt="movies" style="max-width: 44px;">
@@ -132,106 +130,35 @@
     </div>
 </div>
 
+<!-- Trending / Latest Movies Section -->
 <div class="section trending">
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
                 <div class="section-heading">
                     <h6>Trending</h6>
-                    <h2>Trending Movies</h2>
+                    <h2>Latest Movies</h2>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="main-button">
-                    <a th:href="@{/movies.html}">View All</a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="item">
-                    <div class="thumb">
-                        <a th:href="@{/about.html}"><img th:src="@{/assets/trending-01.jpg}" alt=""></a>
-                        <span class="price"><em>$28</em>$20</span>
-                    </div>
-                    <div class="down-content">
-                        <span class="category">Action</span>
-                        <h4>Assassin Creed</h4>
-                        <a th:href="@{/about.html}"><i class="fa fa-shopping-bag"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="item">
-                    <div class="thumb">
-                        <a th:href="@{/about.html}"><img th:src="@{/assets/trending-02.jpg}" alt=""></a>
-                        <span class="price">$44</span>
-                    </div>
-                    <div class="down-content">
-                        <span class="category">Action</span>
-                        <h4>Assassin Creed</h4>
-                        <a th:href="@{/about.html}"><i class="fa fa-shopping-bag"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="item">
-                    <div class="thumb">
-                        <a th:href="@{/about.html}"><img th:src="@{/assets/trending-03.jpg}" alt=""></a>
-                        <span class="price"><em>$64</em>$44</span>
-                    </div>
-                    <div class="down-content">
-                        <span class="category">Action</span>
-                        <h4>Assassin Creed</h4>
-                        <a th:href="@{/about.html}"><i class="fa fa-shopping-bag"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="item">
-                    <div class="thumb">
-                        <a th:href="@{/about.html}"><img th:src="@{/assets/trending-04.jpg}" alt=""></a>
-                        <span class="price">$32</span>
-                    </div>
-                    <div class="down-content">
-                        <span class="category">Action</span>
-                        <h4>Assassin Creed</h4>
-                        <a th:href="@{/about.html}"><i class="fa fa-shopping-bag"></i></a>
-                    </div>
+                    <a th:href="@{/movies}">View All</a>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div class="section most-played">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="section-heading">
-                    <h6>TOP MOVIES</h6>
-                    <h2>Most Watched</h2>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="main-button">
-                    <a th:href="@{/movies.html}">View All</a>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-md-6 col-sm-6" th:each="i : ${#numbers.sequence(1,6)}">
+        <div class="row trending-box">
+            <div class="col-lg-3 col-md-6 mb-30 trending-items"
+                 th:each="movie : ${lastMovies}"
+                 th:classappend="${movie.genre.toLowerCase()}">
                 <div class="item">
                     <div class="thumb">
-                        <a th:href="@{/about.html}">
-                            <img th:src="@{/assets/top-game-0${i}.jpg|}" alt="">
-                        </a>
+                        <img th:src="@{${movie.imageUrl}}" alt="Movie Image" class="img-fluid movie-img">
+                        <span class="price" th:text="'$' + ${movie.ticketPrice}"></span>
                     </div>
                     <div class="down-content">
-                        <span class="category">Adventure</span>
-                        <h4>Assassin Creed</h4>
-                        <a th:href="@{/about.html}">Explore</a>
+                        <span class="category" th:text="${movie.genre}">Genre</span>
+                        <h4 th:text="${movie.title}">Movie Title</h4>
                     </div>
                 </div>
             </div>

@@ -35,22 +35,26 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/**",
                                 "/register",
                                 "/index",
                                 "/about",
                                 "/movies",
-                                "/login",
                                 "/assets/**",
                                 "/css/**",
                                 "/js/**",
                                 "/images/**"
                         ).permitAll()
+                        .anyRequest().authenticated() // all other pages require login
                 )
-                .formLogin().disable()
-                .logout().disable();
+                .formLogin(form -> form
+                        .loginPage("/login")        // your GET login page
+                        .defaultSuccessUrl("/movies") // redirect after login
+                        .permitAll()
+                )
+                .logout(logout -> logout.permitAll());
 
         return http.build();
     }
+
 
 }
