@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -30,4 +31,11 @@ public class MovieController {
         return "movies";
     }
 
+    @GetMapping("/search")
+    public String searchMovies(@RequestParam("keyword") String keyword, Model model) {
+        List<Movie> movies = movieService.searchByTitle(keyword);
+        model.addAttribute("movies", movies);
+        model.addAttribute("keyword", keyword);
+        return "movies";
+    }
 }

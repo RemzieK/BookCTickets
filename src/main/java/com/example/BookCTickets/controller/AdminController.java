@@ -37,9 +37,10 @@ public class AdminController {
 
     @PostMapping("/movies/save")
     public String saveMovie(@ModelAttribute Movie movie,
-                            @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+                            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+                            @RequestParam(value = "existingImageUrl", required = false) String existingImageUrl) throws IOException {
 
-        if (!imageFile.isEmpty()) {
+        if (imageFile != null && !imageFile.isEmpty()) {
             String originalFilename = Paths.get(imageFile.getOriginalFilename()).getFileName().toString();
             String filename = System.currentTimeMillis() + "_" + originalFilename;
 
@@ -52,11 +53,14 @@ public class AdminController {
             Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
             movie.setImageUrl("/uploads/" + filename);
+        } else {
+            movie.setImageUrl(existingImageUrl);
         }
 
         movieService.save(movie);
         return "redirect:/admin?tab=movies";
     }
+
 
     @GetMapping("/movies/delete/{id}")
     public String deleteMovie(@PathVariable Long id){

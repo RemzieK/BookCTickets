@@ -30,8 +30,20 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registerUser(User user) {
+        // Store raw password before encoding (important for authentication)
+        String rawPassword = user.getPassword();
+
+        // Save user (your AuthService should encode password)
         authService.register(user);
-        return "redirect:/login";
+
+        // Automatically log the user in
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getUsername(), rawPassword)
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Redirect to index page (now logged in)
+        return "redirect:/index";
     }
 
 

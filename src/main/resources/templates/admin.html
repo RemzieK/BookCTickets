@@ -109,8 +109,8 @@
                                  style="width:50px;height:50px;object-fit:cover;border-radius:5px;">
                         </td>
                         <td>
-                            <button class="btn-delete" onclick="showInfo(this)">Info</button>
-                            <button class="btn-delete" onclick="showEdit(this)">Edit</button>
+                            <button class="btn-info" onclick="showInfo(this)">Info</button>
+                            <button class="btn-edit" onclick="showEdit(this)">Edit</button>
                             <a th:href="@{'/admin/movies/delete/' + ${movie.id}}" class="btn-delete">Delete</a>
                         </td>
                     </tr>
@@ -178,8 +178,11 @@
         <span class="close" onclick="closeModal('editMovieModal')">&times;</span>
         <h2>Edit Movie</h2>
         <img id="edit-image-preview" style="width:100%;max-height:200px;object-fit:cover;margin-bottom:10px;display:none;">
+
         <form th:action="@{/admin/movies/save}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" id="edit-id">
+            <input type="hidden" name="existingImageUrl" id="edit-existingImageUrl">
+
             <label>Title</label><input type="text" name="title" id="edit-title" required>
             <label>Description</label><textarea name="description" id="edit-description" required></textarea>
             <label>Actors</label><input type="text" name="actors" id="edit-actors" required>
@@ -197,11 +200,13 @@
             <label>Room</label><input type="text" name="room" id="edit-room" required>
             <label>Language</label><input type="text" name="language" id="edit-language" required>
             <label>Age Restriction</label><input type="text" name="ageRestriction" id="edit-ageRestriction" required>
+
             <input type="file" name="imageFile" accept="image/*" onchange="previewEditImage(event)">
             <button type="submit" class="btn-delete">Save Changes</button>
         </form>
     </div>
 </div>
+
 
 <script th:src="@{/js/admin.js}"></script>
 </body>

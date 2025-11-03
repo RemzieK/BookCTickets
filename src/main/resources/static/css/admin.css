@@ -116,60 +116,56 @@ table tr:hover {
     background-color:#f9f9f9;
 }
 
-/* Buttons */
-.btn-create {
-    display:inline-block;
-    margin-bottom:15px;
-    padding:12px 25px;
-    background: linear-gradient(to right, orange, hotpink);
-    color:#fff;
-    text-decoration:none;
-    border-radius:8px;
-    transition:0.3s;
-    font-weight:bold;
-    cursor:pointer;
-}
+/* ====== Buttons (Unified Base) ====== */
 
-.btn-create:hover {
-    transform: translateY(-2px);
-}
-
-.btn-edit, .btn-delete, .btn-info {
-    padding:8px 15px;
-    border-radius:8px;
-    text-decoration:none;
-    color:#fff;
-    margin-right:5px;
-    font-size:0.9rem;
-    font-weight:bold;
-    transition:0.2s;
-    cursor:pointer;
-}
-
-/* Buttons */
-.btn-edit {
-    background-color: #333;
-}
-
-.btn-edit:hover {
-    background-color: #555;
-}
-
+.btn-create,
+.btn-edit,
+.btn-info,
 .btn-delete {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* Default button gradient (for create, edit, info) */
+.btn-create,
+.btn-edit,
+.btn-info {
     background: linear-gradient(to right, orange, hotpink);
 }
 
+/* Delete button gets a darker “danger” look */
+.btn-delete {
+    background: linear-gradient(to right, #b00020, #ff4d4d);
+}
+
+/* Hover effect for all buttons */
+.btn-create:hover,
+.btn-edit:hover,
+.btn-info:hover,
 .btn-delete:hover {
+    transform: translateY(-2px);
     opacity: 0.9;
 }
 
-.btn-info {
-    background: #666;
+/* Optional focus outline for accessibility */
+.btn-create:focus,
+.btn-edit:focus,
+.btn-info:focus,
+.btn-delete:focus {
+    outline: 2px solid #000;
+    outline-offset: 2px;
 }
 
-.btn-info:hover {
-    background: #444;
-}
+
 
 /* Tabs */
 .tab-content {

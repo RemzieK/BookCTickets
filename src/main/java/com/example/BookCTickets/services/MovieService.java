@@ -17,4 +17,7 @@ public class MovieService {
     public void deleteById(Long id) {movieRepository.deleteById(id);}
     public Movie findById(Long id) {return movieRepository.findById(id).orElse(null);}
     public Long countMovies() {return movieRepository.count();}
+    public List<Movie> searchByTitle(String keyword) {
+        return movieRepository.findByTitleContainingIgnoreCase(keyword);
+    }
 }

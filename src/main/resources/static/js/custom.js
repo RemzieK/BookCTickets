@@ -1,14 +1,11 @@
 (function ($) {
-	
 	"use strict";
 
-	// Page loading animation
 	$(window).on('load', function() {
 
         $('#js-preloader').addClass('loaded');
 
     });
-
 
 	$(window).scroll(function() {
 	  var scroll = $(window).scrollTop();
@@ -66,23 +63,24 @@
 
 
 	// Menu elevator animation
-	$('.scroll-to-section a[href*=\\#]:not([href=\\#])').on('click', function() {
-		if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-			var target = $(this.hash);
-			target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-			if (target.length) {
-				var width = $(window).width();
-				if(width < 991) {
-					$('.menu-trigger').removeClass('active');
-					$('.header-area .nav').slideUp(200);	
-				}				
-				$('html,body').animate({
-					scrollTop: (target.offset().top) - 80
-				}, 700);
-				return false;
-			}
-		}
-	});
+  $('.scroll-to-section a[href*="#"]:not([href="#"])').on('click', function() {
+    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') &&
+        location.hostname == this.hostname) {
+      var target = $(this.hash);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+      if (target.length) {
+        var width = $(window).width();
+        if (width < 991) {
+          $('.menu-trigger').removeClass('active');
+          $('.header-area .nav').slideUp(200);
+        }
+        $('html, body').animate({
+          scrollTop: (target.offset().top) - 80
+        }, 700);
+        return false;
+      }
+    }
+  });
 
 
 	// Page loading animation
@@ -103,6 +101,23 @@
 		});
 	});
     
+document.addEventListener("DOMContentLoaded", function () {
+  const profileButton = document.getElementById("profileButton");
+  const profileMenu = document.getElementById("profileMenu");
+
+  if (!profileButton || !profileMenu) return;
+
+  // Toggle dropdown visibility
+  profileButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    profileMenu.classList.toggle("show");
+  });
+
+  // Close dropdown if clicked outside
+  document.addEventListener("click", () => {
+    profileMenu.classList.remove("show");
+  });
+});
 
 
 })(window.jQuery);

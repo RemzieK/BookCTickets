@@ -1,39 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+    <link th:href="@{https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
     <title>BookCTickets - Movies</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-
+    <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
     <!-- Additional CSS Files -->
-    <link th:href="@{/css/fontawesome.css}" rel="stylesheet">
-    <link th:href="@{/css/style.css}" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <link th:href="@{/css/fontawesome.css}" rel="stylesheet" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <link th:href="@{https://unpkg.com/swiper@7/swiper-bundle.min.css}" rel="stylesheet" />
 </head>
 
 <body>
-
-<!-- ***** Preloader Start ***** -->
+<!-- ***** Preloader ***** -->
 <div id="js-preloader" class="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
-        <div class="dots">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
+        <div class="dots"><span></span><span></span><span></span></div>
     </div>
 </div>
-<!-- ***** Preloader End ***** -->
 
-<!-- ***** Header Area Start ***** -->
+<!-- ***** Header ***** -->
 <header class="header-area header-sticky">
     <div class="container">
         <div class="row">
@@ -46,18 +37,32 @@
                         <li><a th:href="@{/index}">Home</a></li>
                         <li><a th:href="@{/movies}" class="active">Movies</a></li>
                         <li><a th:href="@{/about}">About Us</a></li>
-                        <li><a th:href="@{/login}">Sign In</a></li>
+                        <li sec:authorize="isAnonymous()"><a th:href="@{/login}">Sign In</a></li>
+
+                        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <span sec:authentication="name"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form th:action="@{/logout}" method="post">
+                                        <button type="submit" class="dropdown-item">Logout</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
+                    <a class="menu-trigger"><span>Menu</span></a>
                 </nav>
             </div>
         </div>
     </div>
 </header>
-<!-- ***** Header Area End ***** -->
 
+<!-- ***** Page Heading ***** -->
 <div class="page-heading header-text">
     <div class="container">
         <div class="row">
@@ -69,8 +74,19 @@
     </div>
 </div>
 
+<!-- ***** Movies Section ***** -->
 <div class="section trending">
     <div class="container">
+
+        <!-- 🔍 Search Bar -->
+        <div class="search-input mb-4 text-center">
+            <form th:action="@{/movies/search}" method="get" class="d-flex justify-content-center">
+                <input type="text" name="keyword" th:value="${keyword}" placeholder="Search movies by title..."
+                       class="form-control w-50 me-2" style="border-radius: 8px;">
+                <button type="submit" class="btn btn-primary" style="border-radius: 8px;">Search</button>
+            </form>
+        </div>
+
         <ul class="trending-filter">
             <li><a class="is_active" href="#!" data-filter="*">Show All</a></li>
             <li><a href="#!" data-filter=".adventure">Adventure</a></li>
@@ -79,8 +95,9 @@
         </ul>
 
         <div class="row trending-box">
-            <!-- Movies Loop -->
-            <div class="col-lg-3 col-md-6 mb-30 trending-items" th:each="movie : ${movies}" th:classappend="${movie.genre.toLowerCase()}">
+            <div class="col-lg-3 col-md-6 mb-30 trending-items"
+                 th:each="movie : ${movies}"
+                 th:classappend="${movie.genre.toLowerCase()}">
                 <div class="item">
                     <div class="thumb">
                         <img th:src="@{${movie.imageUrl}}" alt="Movie Image" class="img-fluid movie-img">
@@ -98,11 +115,10 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
-<!-- Movie Modals -->
+<!-- ***** Movie Modals ***** -->
 <div th:each="movie : ${movies}">
     <div class="modal fade" th:id="${'movieModal' + movie.id}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -128,7 +144,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a th:href="@{'/book/' + ${movie.id}}" class="btn btn-success">Book a Ticket</a>
+                    <span sec:authorize="isAuthenticated()">
+                        <a th:href="@{'/book/' + ${movie.id}}" class="btn btn-success">Book a Ticket</a>
+                    </span>
+                    <span sec:authorize="isAnonymous()">
+                        <a th:href="@{/login}" class="btn btn-secondary">Login to Book</a>
+                    </span>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -146,11 +167,9 @@
 
 <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
 <script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/js/isotope.min.js}"></script>
 <script th:src="@{/js/owl-carousel.js}"></script>
 <script th:src="@{/js/counter.js}"></script>
 <script th:src="@{/js/custom.js}"></script>
-
 </body>
 </html>

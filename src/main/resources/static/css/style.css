@@ -78,11 +78,6 @@ img {
   overflow: hidden;
 }
 
-/* 
----------------------------------------------
-Global Styles
---------------------------------------------- 
-*/
 html,
 body {
   font-family: 'Poppins', sans-serif;
@@ -144,12 +139,6 @@ body {
   background-color: #ff8c00;
   color: #fff;
 }
-
-/* 
----------------------------------------------
-Pre-loader Style
---------------------------------------------- 
-*/
 
 .js-preloader {
   position: fixed;
@@ -244,14 +233,6 @@ Pre-loader Style
   background: #0071f8;
   border-radius: 50%;
 }
-
-
-
-/* 
----------------------------------------------
-Header Style
---------------------------------------------- 
-*/
 
 .background-header {
   background-image: url(../assets/footer-bg.jpg);
@@ -1516,4 +1497,68 @@ body {
     height: 300px;
     object-fit: cover;
     border-radius: 5px;
+}
+.profile-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-btn:hover {
+  opacity: 0.8;
+}
+
+.profile-img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #222;
+  border-radius: 8px;
+  min-width: 160px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+  color: #fff;
+  padding: 10px 16px;
+  display: block;
+  text-decoration: none;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background-color: #444;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.logout-btn {
+  color: #ff6b6b;
 }

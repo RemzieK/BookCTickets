@@ -34,27 +34,42 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
+                        // Everything is public for now
                         .requestMatchers(
-                                "/register",
+                                "/",
                                 "/index",
                                 "/about",
-                                "/movies",
+                                "/movies/**",
+                                "/admin/**",
+                                "/register",
+                                "/login",
+                                "/uploads/**",
                                 "/assets/**",
                                 "/css/**",
                                 "/js/**",
+                                "/vendor/**",
                                 "/images/**"
                         ).permitAll()
-                        .anyRequest().authenticated() // all other pages require login
+
+                        // Require login ONLY for booking
+                        .requestMatchers("/book/**").authenticated()
+
+                        // Everything else also public (optional for dev phase)
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")        // your GET login page
-                        .defaultSuccessUrl("/movies") // redirect after login
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/movies", true)
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll());
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/index")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                );
 
         return http.build();
     }
-
-
 }

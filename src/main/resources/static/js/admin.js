@@ -46,6 +46,7 @@ function openEditModal(id, title, description, actors, genre, ticketPrice, hours
     modal.querySelector('#edit-room').value = room;
     modal.querySelector('#edit-language').value = language;
     modal.querySelector('#edit-ageRestriction').value = ageRestriction;
+     modal.querySelector('#edit-existingImageUrl').value = imageUrl;
 
     const img = modal.querySelector('#edit-image-preview');
     if(imageUrl){
