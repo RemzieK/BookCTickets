@@ -52,7 +52,7 @@ public class TicketBookController {
     @PostMapping("/{movieId}/confirm")
     public String confirmBooking(@PathVariable Long movieId,
                                  @RequestParam String hour,
-                                 @RequestParam String seats, // comma-separated
+                                 @RequestParam String seats,
                                  @RequestParam String cardName,
                                  @RequestParam String cardNumber,
                                  @RequestParam String expiry,

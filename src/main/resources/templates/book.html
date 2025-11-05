@@ -1,111 +1,68 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${movie.title} + ' - Book Tickets'">Book Tickets</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link th:href="@{/css/style.css}" rel="stylesheet">
-    <style>
-        .seat { width:40px; height:40px; margin:3px; }
-        .seat.selected { background-color:#28a745; color:white; }
-        .seat.taken { background-color:#dc3545; color:white; pointer-events:none; }
-    </style>
+    <link th:href="@{https://fonts.googleapis.com/icon?family=Material+Icons}" rel="stylesheet">
+    <link th:href="@{https://fonts.googleapis.com/css?family=Oswald:300,400,700}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/book.css}">
+    <title>Book Seats</title>
 </head>
-
 <body>
-
-<header class="header-area header-sticky">
-    <div class="container">
-        <nav class="main-nav d-flex justify-content-between align-items-center">
-            <a th:href="@{/index}" class="logo"><img th:src="@{/assets/logo-w.png}" alt="logo" style="width:158px;"></a>
-            <ul class="nav">
-                <li><a th:href="@{/index}">Home</a></li>
-                <li><a th:href="@{/movies}">Movies</a></li>
-                <li><a th:href="@{/about}">About Us</a></li>
-                <li>
-                    <span sec:authorize="isAnonymous()"><a th:href="@{/login}">Sign In</a></span>
-                    <span sec:authorize="isAuthenticated()"><a th:href="@{/profile}">Hello, <span sec:authentication="name"></span></a></span>
-                </li>
-            </ul>
-            <a class="menu-trigger"><span>Menu</span></a>
-        </nav>
-    </div>
-</header>
-
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-4">
-            <img th:src="@{${movie.imageUrl}}" class="img-fluid" alt="Movie Image">
-        </div>
-        <div class="col-md-8">
-            <h2 th:text="${movie.title}"></h2>
-            <p><strong>Genre:</strong> <span th:text="${movie.genre}"></span></p>
-            <p><strong>Price:</strong> $<span th:text="${movie.ticketPrice}"></span></p>
-        </div>
-    </div>
-
-    <hr>
-
-    <h4>Select Time:</h4>
-    <div class="mb-3">
-        <button th:each="h : ${hours}" type="button" class="btn btn-outline-primary hour-btn" th:text="${h}" th:data-hour="${h}"></button>
-    </div>
-
-    <h4>Select Seats:</h4>
-    <div th:each="r : ${#numbers.sequence(1,5)}">
-        <button th:each="c : ${#numbers.sequence(1,10)}"
-                th:id="'seat-' + r + '-' + c"
-                th:text="'R'+r+'C'+c"
-                class="btn btn-sm btn-outline-success seat-btn"
-                th:disabled="${bookedSeats[h]?.contains('R'+r+'C'+c)}">
-        </button>
-    </div>
-
-
-    <form th:action="@{'/book/' + ${movie.id} + '/confirm'}" method="post">
-        <input type="hidden" name="hour" id="selectedHour"/>
-        <input type="hidden" name="seats" id="selectedSeats"/>
-        <div id="paymentSection" style="display:none;" class="mb-3">
-            <input type="text" name="cardName" placeholder="Name on Card" class="form-control mb-2" required>
-            <input type="text" name="cardNumber" placeholder="Card Number" class="form-control mb-2" required>
-            <input type="text" name="expiry" placeholder="MM/YY" class="form-control mb-2" required>
-            <input type="text" name="cvc" placeholder="CVC" class="form-control mb-2" required>
-            <button type="submit" class="btn btn-success">Book</button>
-        </div>
-    </form>
+<h4>Select Time:</h4>
+<div class="mb-3">
+    <button th:each="h : ${hours}" type="button" class="btn btn-outline-primary hour-btn" th:text="${h}" th:data-hour="${h}"></button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    let selectedHour = null;
-    let selectedSeats = [];
+<h1>Select the seats:</h1>
 
-    document.querySelectorAll('.hour-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            selectedHour = this.dataset.hour;
-            document.getElementById('selectedHour').value = selectedHour;
-            document.getElementById('paymentSection').style.display = 'block';
-        });
-    });
+<div id="cinema-container">
+    <div class="side-seats">
+        <table class="seats">
+            <thead><tr></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
-    document.querySelectorAll('.seat-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            if(this.classList.contains('btn-success')){
-                this.classList.remove('btn-success');
-                this.classList.add('btn-outline-success');
-                selectedSeats = selectedSeats.filter(s => s !== this.textContent);
-            } else {
-                this.classList.remove('btn-outline-success');
-                this.classList.add('btn-success');
-                selectedSeats.push(this.textContent);
-            }
-            document.getElementById('selectedSeats').value = selectedSeats.join(',');
-        });
-    });
-</script>
+    <div class="center-seats">
+        <table class="seats">
+            <thead><tr></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
+    <div class="side-seats">
+        <table class="seats">
+            <thead><tr></tr></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div class="screen">
+    <span>SCREEN</span>
+</div>
+
+<div class="container">
+    <table id="tbl-seats"></table>
+    <button id="show-seats">Save Seats</button>
+    <button id="reserve-btn">Reserve</button>
+    <div id="result">
+        <p id="selected-seats"></p>
+        <p id="total-price"></p>
+    </div>
+</div>
+<!--not added logic-->
+<div id="paymentSection" style="display:none;" class="mb-3">
+    <input type="text" name="cardName" placeholder="Name on Card" required>
+    <input type="text" name="cardNumber" placeholder="Card Number" required>
+    <input type="text" name="expiry" placeholder="MM/YY" required>
+    <input type="text" name="cvc" placeholder="CVC" required>
+    <button id="buy-btn" type="button" class="btn btn-success">Buy</button>
+</div>
+
+
+
+<script th:src="@{/js/book.js}"></script>
 </body>
 </html>
