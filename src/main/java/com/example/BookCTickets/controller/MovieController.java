@@ -13,16 +13,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/movies")
 public class MovieController {
-
     private final MovieService movieService;
-
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
     }
-
     @GetMapping
     public String movies(Model model) {
-        // Sort by ID descending to show newest first
         List<Movie> movies = movieService.findAll()
                 .stream()
                 .sorted((a,b) -> b.getId().compareTo(a.getId()))
@@ -30,7 +26,6 @@ public class MovieController {
         model.addAttribute("movies", movies);
         return "movies";
     }
-
     @GetMapping("/search")
     public String searchMovies(@RequestParam("keyword") String keyword, Model model) {
         List<Movie> movies = movieService.searchByTitle(keyword);

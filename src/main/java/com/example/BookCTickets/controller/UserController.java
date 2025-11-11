@@ -15,7 +15,6 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private UserService userService;
-
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users = userService.findAll();
@@ -26,7 +25,6 @@ public class UserController {
         Optional<User> user = userService.findById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user){
         try{
@@ -36,7 +34,6 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable long id){
         if(!userService.findById(id).isPresent()){

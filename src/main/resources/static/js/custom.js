@@ -52,17 +52,13 @@
 		}
 	}
 
-
-	// Menu Dropdown Toggle
 	if($('.menu-trigger').length){
-		$(".menu-trigger").on('click', function() {	
+		$(".menu-trigger").on('click', function()	{
 			$(this).toggleClass('active');
 			$('.header-area .nav').slideToggle(200);
 		});
 	}
 
-
-	// Menu elevator animation
   $('.scroll-to-section a[href*="#"]:not([href="#"])').on('click', function() {
     if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') &&
         location.hostname == this.hostname) {
@@ -82,8 +78,6 @@
     }
   });
 
-
-	// Page loading animation
 	$(window).on('load', function() {
 		if($('.cover').length){
 			$('.cover').parallax({
@@ -100,23 +94,5 @@
 			}, 300);
 		});
 	});
-    
-document.addEventListener("DOMContentLoaded", function () {
-  const profileButton = document.getElementById("profileButton");
-  const profileMenu = document.getElementById("profileMenu");
-
-  if (!profileButton || !profileMenu) return;
-
-  // Toggle dropdown visibility
-  profileButton.addEventListener("click", (e) => {
-    e.stopPropagation();
-    profileMenu.classList.toggle("show");
-  });
-
-  // Close dropdown if clicked outside
-  document.addEventListener("click", () => {
-    profileMenu.classList.remove("show");
-  });
-});
 
 })(window.jQuery);

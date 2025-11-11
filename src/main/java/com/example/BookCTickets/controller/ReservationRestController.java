@@ -1,0 +1,110 @@
+package com.example.BookCTickets.controller;
+
+import com.example.BookCTickets.model.Movie;
+import com.example.BookCTickets.model.User;
+import com.example.BookCTickets.services.MovieService;
+import com.example.BookCTickets.services.PaymentService;
+import com.example.BookCTickets.services.TicketService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/reservation")
+@RequiredArgsConstructor
+public class ReservationRestController {
+
+    private final MovieService movieService;
+    private final TicketService ticketService;
+    private final PaymentService paymentService;
+
+    @GetMapping("/{movieId}/occupied-seats")
+    public ResponseEntity<List<String>> getOccupiedSeats(
+            @PathVariable Long movieId,
+            @RequestParam String hour
+    ) {
+        Movie movie = movieService.findById(movieId);
+        if (movie == null) return ResponseEntity.notFound().build();
+
+        List<String> seats = ticketService.getOccupiedSeats(movieId, hour);
+        return ResponseEntity.ok(seats);
+    }
+
+    @PostMapping("/{movieId}/reserve-seats")
+    public ResponseEntity<Map<String, String>> reserveSeats(
+            @PathVariable Long movieId,
+            @RequestParam String hour,
+            @RequestBody List<String> seats,
+            Principal principal
+    ) {
+        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("message", "Authentication required"));
+
+        Movie movie = movieService.findById(movieId);
+        if (movie == null) return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", "Movie not found"));
+
+        // Fix: Get user from principal correctly
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+
+        try {
+            ticketService.reserveSeats(user, movie, hour, seats);
+            return ResponseEntity.ok(Map.of("message", "Seats reserved temporarily"));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    @PostMapping("/{movieId}/confirm-payment")
+    public ResponseEntity<Map<String, String>> confirmPayment(
+            @PathVariable Long movieId,
+            @RequestParam String hour,
+            @RequestBody PaymentRequest payment,
+            Principal principal
+    ) {
+        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("message", "Authentication required"));
+
+        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        Movie movie = movieService.findById(movieId);
+
+        if (movie == null) return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", "Movie not found"));
+
+        // Validate payment data
+        if (payment.cardName() == null || payment.cardNumber() == null
+                || payment.expiry() == null || payment.cvc() == null
+                || payment.cardName().isBlank() || payment.cardNumber().isBlank()
+                || payment.expiry().isBlank() || payment.cvc().isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Payment info incomplete"));
+        }
+
+        if (payment.seats() == null || payment.seats().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "No seats selected"));
+        }
+
+        try {
+            // Process payment and mark seats as paid
+            paymentService.processPaymentWithSeats(user, movie, hour, payment.seats(),
+                    payment.cardName(), payment.cardNumber(), payment.expiry(), payment.cvc());
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Payment successful! Your booking is confirmed.",
+                    "card", "**** **** **** " + payment.cardNumber().substring(payment.cardNumber().length() - 4)
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "Payment processing failed: " + e.getMessage()));
+        }
+    }
+
+    public record PaymentRequest(String cardName, String cardNumber, String expiry, String cvc, List<String> seats) {}
+}

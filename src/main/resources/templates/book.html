@@ -9,59 +9,65 @@
     <title>Book Seats</title>
 </head>
 <body>
-<h4>Select Time:</h4>
-<div class="mb-3">
-    <button th:each="h : ${hours}" type="button" class="btn btn-outline-primary hour-btn" th:text="${h}" th:data-hour="${h}"></button>
-</div>
 
-<h1>Select the seats:</h1>
+<!-- Root element with data attributes -->
+<div id="booking-root"
+     th:data-movie-id="${movie.id}"
+     th:data-price-per-seat="${movie.ticketPrice}">
 
-<div id="cinema-container">
-    <div class="side-seats">
-        <table class="seats">
-            <thead><tr></tr></thead>
-            <tbody></tbody>
-        </table>
+    <h1 th:text="'Select seats for ' + ${movie.title}">Select the seats</h1>
+
+    <h4>Select Time:</h4>
+    <div class="mb-3">
+        <button th:each="h : ${hours}" type="button" class="btn hour-btn"
+                th:text="${h}" th:data-hour="${h}"></button>
     </div>
 
-    <div class="center-seats">
-        <table class="seats">
-            <thead><tr></tr></thead>
-            <tbody></tbody>
-        </table>
+    <div class="screen">
+        <span>SCREEN</span>
     </div>
 
-    <div class="side-seats">
-        <table class="seats">
-            <thead><tr></tr></thead>
-            <tbody></tbody>
-        </table>
+    <div id="cinema-container">
+        <div class="side-seats">
+            <table class="seats">
+                <thead><tr></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="center-seats">
+            <table class="seats">
+                <thead><tr></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="side-seats">
+            <table class="seats">
+                <thead><tr></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
-</div>
 
-<div class="screen">
-    <span>SCREEN</span>
-</div>
+    <div class="container">
+        <button id="show-seats" type="button">Show Selection</button>
+        <button id="reserve-btn" type="button" style="display:none;">Reserve Seats</button>
 
-<div class="container">
-    <table id="tbl-seats"></table>
-    <button id="show-seats">Save Seats</button>
-    <button id="reserve-btn">Reserve</button>
-    <div id="result">
-        <p id="selected-seats"></p>
-        <p id="total-price"></p>
+        <div id="result">
+            <p id="selected-seats"></p>
+            <p id="total-price"></p>
+        </div>
     </div>
-</div>
-<!--not added logic-->
-<div id="paymentSection" style="display:none;" class="mb-3">
-    <input type="text" name="cardName" placeholder="Name on Card" required>
-    <input type="text" name="cardNumber" placeholder="Card Number" required>
-    <input type="text" name="expiry" placeholder="MM/YY" required>
-    <input type="text" name="cvc" placeholder="CVC" required>
-    <button id="buy-btn" type="button" class="btn btn-success">Buy</button>
-</div>
 
+    <div id="paymentSection" style="display:none;">
+        <h4>Payment Information</h4>
+        <input type="text" name="cardName" placeholder="Name on Card" required>
+        <input type="text" name="cardNumber" placeholder="Card Number" required>
+        <input type="text" name="expiry" placeholder="MM/YY" required>
+        <input type="text" name="cvc" placeholder="CVC" required>
+        <button id="buy-btn" type="button">Pay Now</button>
+    </div>
 
+</div>
 
 <script th:src="@{/js/book.js}"></script>
 </body>

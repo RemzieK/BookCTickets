@@ -1,38 +1,73 @@
 package com.example.BookCTickets.services;
 
+import com.example.BookCTickets.model.Movie;
 import com.example.BookCTickets.model.Ticket;
+import com.example.BookCTickets.model.User;
 import com.example.BookCTickets.repositories.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class TicketService {
     private final TicketRepository ticketRepository;
 
-    public long countTickets(){
-        return ticketRepository.findAll().stream().mapToInt(Ticket::getQuantity).sum();
+    public List<String> getOccupiedSeats(Long movieId, String hour) {
+        return ticketRepository.findSeatsByMovieIdAndHour(movieId, hour);
     }
 
-    public Map<String, List<String>> getBookedSeats(Long movieId) {
-        List<Ticket> tickets = ticketRepository.findAll()
-                .stream()
-                .filter(t -> t.getMovie().getId().equals(movieId))
+    @Transactional
+    public void reserveSeats(User user, Movie movie, String hour, List<String> seats) {
+        String room = movie.getRoom();
+
+        // Check if any seat is already occupied (paid)
+        for (String seat : seats) {
+            if (ticketRepository.existsByMovieIdAndHourAndSeatAndPaid(movie.getId(), hour, seat, true)) {
+                throw new IllegalStateException("Seat " + seat + " is already booked and paid for.");
+            }
+        }
+
+        // Remove any existing temporary reservations for these seats by this user
+        for (String seat : seats) {
+            Ticket existing = ticketRepository.findByMovieIdAndHourAndSeatAndUser(
+                    movie.getId(), hour, seat, user);
+            if (existing != null) {
+                ticketRepository.delete(existing);
+            }
+        }
+
+        // Create new reservations
+        List<Ticket> tickets = seats.stream()
+                .map(seat -> Ticket.builder()
+                        .user(user)
+                        .movie(movie)
+                        .seat(seat)
+                        .hour(hour)
+                        .room(room)
+                        .price(movie.getTicketPrice())
+                        .paid(false)
+                        .build())
                 .toList();
 
-        Map<String, List<String>> bookedSeats = new HashMap<>();
-        for (Ticket ticket : tickets) {
-            bookedSeats.computeIfAbsent(ticket.getHour(), k -> new ArrayList<>()).add(ticket.getSeat());
-        }
-        return bookedSeats;
+        ticketRepository.saveAll(tickets);
     }
 
-    public Ticket save(Ticket ticket){
-        return ticketRepository.save(ticket);
+    @Transactional
+    public void confirmPayment(User user, Movie movie, String hour, List<String> seats) {
+        for (String seat : seats) {
+            Ticket ticket = ticketRepository.findByMovieIdAndHourAndSeatAndUser(
+                    movie.getId(), hour, seat, user);
+            if (ticket != null) {
+                ticket.setPaid(true);
+                ticketRepository.save(ticket);
+            }
+        }
+    }
+
+    public long countTickets() {
+        return ticketRepository.countByPaid(true);
     }
 }

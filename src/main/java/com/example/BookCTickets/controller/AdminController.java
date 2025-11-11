@@ -61,14 +61,12 @@ public class AdminController {
         return "redirect:/admin?tab=movies";
     }
 
-
     @GetMapping("/movies/delete/{id}")
     public String deleteMovie(@PathVariable Long id){
         movieService.deleteById(id);
         return "redirect:/admin?tab=movies";
     }
 
-    // User delete
     @GetMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable Long id){
         userService.deleteById(id);

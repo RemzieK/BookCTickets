@@ -3,17 +3,13 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <title>BookCTickets - About us</title>
 
-    <!-- Bootstrap core CSS -->
     <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-
-    <!-- Additional CSS Files -->
     <link th:href="@{/css/fontawesome.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
@@ -21,7 +17,6 @@
 
 <body>
 
-<!-- ***** Preloader Start ***** -->
 <div id="js-preloader" class="js-preloader">
     <div class="preloader-inner">
         <span class="dot"></span>
@@ -32,37 +27,30 @@
         </div>
     </div>
 </div>
-<!-- ***** Preloader End ***** -->
 
-<!-- ***** Header Area Start ***** -->
 <header class="header-area header-sticky">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
                     <a th:href="@{/index}" class="logo">
                         <img th:src="@{/assets/logo-w.png}" alt="" style="width: 158px;">
                     </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
+
                     <ul class="nav">
                         <li><a th:href="@{/index}" >Home</a></li>
                         <li><a th:href="@{/movies}">Movies</a></li>
                         <li><a th:href="@{/about}" class="active">About Us</a></li>
-                        <!-- For anonymous (not logged in) users -->
                         <li sec:authorize="isAnonymous()">
                             <a th:href="@{/login}">Sign In</a>
                         </li>
-
-                        <!-- For logged-in users -->
                         <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <span sec:authentication="name"></span>
+                                <span sec:authentication="name"></span>&nbsp;
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" th:href="@{/profile}">Profile</a></li>
+                                <li><span class="dropdown-text-plain">Profile</span></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form th:action="@{/logout}" method="post">
@@ -75,13 +63,11 @@
                     <a class='menu-trigger'>
                         <span>Menu</span>
                     </a>
-                    <!-- ***** Menu End ***** -->
                 </nav>
             </div>
         </div>
     </div>
 </header>
-<!-- ***** Header Area End ***** -->
 
 <div class="page-heading header-text">
     <div class="container">
@@ -129,6 +115,5 @@
 <script th:src="@{/js/owl-carousel.js}"></script>
 <script th:src="@{/js/counter.js}"></script>
 <script th:src="@{/js/custom.js}"></script>
-
 </body>
 </html>
