@@ -41,7 +41,6 @@ public class AuthController {
         return "redirect:/index";
     }
 
-
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";

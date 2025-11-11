@@ -186,7 +186,6 @@
 			var clones = [],
 				items = this._items,
 				settings = this.settings,
-				// TODO: Should be computed from number of min width items in stage
 				view = Math.max(settings.items * 2, 4),
 				size = Math.ceil(items.length / 2) * 2,
 				repeat = settings.loop && items.length ? settings.rewind ? view : Math.max(view, size) : 0,
@@ -1112,14 +1111,6 @@
 		}
 	};
 
-	/**
-	 * Attaches to an internal event.
-	 * @protected
-	 * @param {HTMLElement} element - The event source.
-	 * @param {String} event - The event name.
-	 * @param {Function} listener - The event handler to attach.
-	 * @param {Boolean} capture - Wether the event should be handled at the capturing phase or not.
-	 */
 	Owl.prototype.on = function(element, event, listener, capture) {
 		if (element.addEventListener) {
 			element.addEventListener(event, listener, capture);
@@ -1128,14 +1119,6 @@
 		}
 	};
 
-	/**
-	 * Detaches from an internal event.
-	 * @protected
-	 * @param {HTMLElement} element - The event source.
-	 * @param {String} event - The event name.
-	 * @param {Function} listener - The attached event handler to detach.
-	 * @param {Boolean} capture - Wether the attached event handler was registered as a capturing listener or not.
-	 */
 	Owl.prototype.off = function(element, event, listener, capture) {
 		if (element.removeEventListener) {
 			element.removeEventListener(event, listener, capture);
@@ -1144,17 +1127,6 @@
 		}
 	};
 
-	/**
-	 * Triggers a public event.
-	 * @todo Remove `status`, `relatedTarget` should be used instead.
-	 * @protected
-	 * @param {String} name - The event name.
-	 * @param {*} [data=null] - The event data.
-	 * @param {String} [namespace=carousel] - The event namespace.
-	 * @param {String} [state] - The state which is associated with the event.
-	 * @param {Boolean} [enter=false] - Indicates if the call enters the specified state or not.
-	 * @returns {Event} - The event arguments.
-	 */
 	Owl.prototype.trigger = function(name, data, namespace, state, enter) {
 		var status = {
 			item: { count: this._items.length, index: this.current() }
@@ -1184,10 +1156,6 @@
 		return event;
 	};
 
-	/**
-	 * Enters a state.
-	 * @param name - The state name.
-	 */
 	Owl.prototype.enter = function(name) {
 		$.each([ name ].concat(this._states.tags[name] || []), $.proxy(function(i, name) {
 			if (this._states.current[name] === undefined) {
@@ -1198,21 +1166,13 @@
 		}, this));
 	};
 
-	/**
-	 * Leaves a state.
-	 * @param name - The state name.
-	 */
+
 	Owl.prototype.leave = function(name) {
 		$.each([ name ].concat(this._states.tags[name] || []), $.proxy(function(i, name) {
 			this._states.current[name]--;
 		}, this));
 	};
 
-	/**
-	 * Registers an event or state.
-	 * @public
-	 * @param {Object} object - The event or state to register.
-	 */
 	Owl.prototype.register = function(object) {
 		if (object.type === Owl.Type.Event) {
 			if (!$.event.special[object.name]) {
@@ -1242,35 +1202,18 @@
 		}
 	};
 
-	/**
-	 * Suppresses events.
-	 * @protected
-	 * @param {Array.<String>} events - The events to suppress.
-	 */
 	Owl.prototype.suppress = function(events) {
 		$.each(events, $.proxy(function(index, event) {
 			this._supress[event] = true;
 		}, this));
 	};
 
-	/**
-	 * Releases suppressed events.
-	 * @protected
-	 * @param {Array.<String>} events - The events to release.
-	 */
 	Owl.prototype.release = function(events) {
 		$.each(events, $.proxy(function(index, event) {
 			delete this._supress[event];
 		}, this));
 	};
 
-	/**
-	 * Gets unified pointer coordinates from event.
-	 * @todo #261
-	 * @protected
-	 * @param {Event} - The `mousedown` or `touchstart` event.
-	 * @returns {Object} - Contains `x` and `y` coordinates of current pointer position.
-	 */
 	Owl.prototype.pointer = function(event) {
 		var result = { x: null, y: null };
 
@@ -1291,24 +1234,10 @@
 		return result;
 	};
 
-	/**
-	 * Determines if the input is a Number or something that can be coerced to a Number
-	 * @protected
-	 * @param {Number|String|Object|Array|Boolean|RegExp|Function|Symbol} - The input to be tested
-	 * @returns {Boolean} - An indication if the input is a Number or can be coerced to a Number
-	 */
 	Owl.prototype.isNumeric = function(number) {
 		return !isNaN(parseFloat(number));
 	};
 
-	/**
-	 * Gets the difference of two vectors.
-	 * @todo #261
-	 * @protected
-	 * @param {Object} - The first vector.
-	 * @param {Object} - The second vector.
-	 * @returns {Object} - The difference.
-	 */
 	Owl.prototype.difference = function(first, second) {
 		return {
 			x: first.x - second.x,
@@ -1316,11 +1245,6 @@
 		};
 	};
 
-	/**
-	 * The jQuery Plugin for the Owl Carousel
-	 * @todo Navigation plugin `next` and `prev`
-	 * @public
-	 */
 	$.fn.owlCarousel = function(option) {
 		var args = Array.prototype.slice.call(arguments, 1);
 
@@ -1352,55 +1276,17 @@
 		});
 	};
 
-	/**
-	 * The constructor for the jQuery Plugin
-	 * @public
-	 */
 	$.fn.owlCarousel.Constructor = Owl;
 
 })(window.Zepto || window.jQuery, window, document);
 
-/**
- * AutoRefresh Plugin
- * @version 2.3.4
- * @author Artus Kolanowski
- * @author David Deutsch
- * @license The MIT License (MIT)
- */
 ;(function($, window, document, undefined) {
 
-	/**
-	 * Creates the auto refresh plugin.
-	 * @class The Auto Refresh Plugin
-	 * @param {Owl} carousel - The Owl Carousel
-	 */
 	var AutoRefresh = function(carousel) {
-		/**
-		 * Reference to the core.
-		 * @protected
-		 * @type {Owl}
-		 */
 		this._core = carousel;
-
-		/**
-		 * Refresh interval.
-		 * @protected
-		 * @type {number}
-		 */
 		this._interval = null;
-
-		/**
-		 * Whether the element is currently visible or not.
-		 * @protected
-		 * @type {Boolean}
-		 */
 		this._visible = null;
 
-		/**
-		 * All event handlers.
-		 * @protected
-		 * @type {Object}
-		 */
 		this._handlers = {
 			'initialized.owl.carousel': $.proxy(function(e) {
 				if (e.namespace && this._core.settings.autoRefresh) {
@@ -1409,25 +1295,16 @@
 			}, this)
 		};
 
-		// set default options
 		this._core.options = $.extend({}, AutoRefresh.Defaults, this._core.options);
 
-		// register event handlers
 		this._core.$element.on(this._handlers);
 	};
 
-	/**
-	 * Default options.
-	 * @public
-	 */
 	AutoRefresh.Defaults = {
 		autoRefresh: true,
 		autoRefreshInterval: 500
 	};
 
-	/**
-	 * Watches the element.
-	 */
 	AutoRefresh.prototype.watch = function() {
 		if (this._interval) {
 			return;
@@ -1437,9 +1314,6 @@
 		this._interval = window.setInterval($.proxy(this.refresh, this), this._core.settings.autoRefreshInterval);
 	};
 
-	/**
-	 * Refreshes the element.
-	 */
 	AutoRefresh.prototype.refresh = function() {
 		if (this._core.isVisible() === this._visible) {
 			return;
@@ -1452,9 +1326,6 @@
 		this._visible && (this._core.invalidate('width') && this._core.refresh());
 	};
 
-	/**
-	 * Destroys the plugin.
-	 */
 	AutoRefresh.prototype.destroy = function() {
 		var handler, property;
 
@@ -1472,41 +1343,10 @@
 
 })(window.Zepto || window.jQuery, window, document);
 
-/**
- * Lazy Plugin
- * @version 2.3.4
- * @author Bartosz Wojciechowski
- * @author David Deutsch
- * @license The MIT License (MIT)
- */
 ;(function($, window, document, undefined) {
-
-	/**
-	 * Creates the lazy plugin.
-	 * @class The Lazy Plugin
-	 * @param {Owl} carousel - The Owl Carousel
-	 */
 	var Lazy = function(carousel) {
-
-		/**
-		 * Reference to the core.
-		 * @protected
-		 * @type {Owl}
-		 */
 		this._core = carousel;
-
-		/**
-		 * Already loaded items.
-		 * @protected
-		 * @type {Array.<jQuery>}
-		 */
 		this._loaded = [];
-
-		/**
-		 * Event handlers.
-		 * @protected
-		 * @type {Object}
-		 */
 		this._handlers = {
 			'initialized.owl.carousel change.owl.carousel resized.owl.carousel': $.proxy(function(e) {
 				if (!e.namespace) {
@@ -1527,7 +1367,6 @@
 					//TODO: Need documentation for this new option
 					if (settings.lazyLoadEager > 0) {
 						n += settings.lazyLoadEager;
-						// If the carousel is looping also preload images that are to the "left"
 						if (settings.loop) {
               position -= settings.lazyLoadEager;
               n++;
@@ -1543,27 +1382,16 @@
 			}, this)
 		};
 
-		// set the default options
 		this._core.options = $.extend({}, Lazy.Defaults, this._core.options);
 
-		// register event handler
 		this._core.$element.on(this._handlers);
 	};
 
-	/**
-	 * Default options.
-	 * @public
-	 */
 	Lazy.Defaults = {
 		lazyLoad: false,
 		lazyLoadEager: 0
 	};
 
-	/**
-	 * Loads all resources of an item at the specified position.
-	 * @param {Number} position - The absolute position of the item.
-	 * @protected
-	 */
 	Lazy.prototype.load = function(position) {
 		var $item = this._core.$stage.children().eq(position),
 			$elements = $item && $item.find('.owl-lazy');
@@ -1603,10 +1431,6 @@
 		this._loaded.push($item.get(0));
 	};
 
-	/**
-	 * Destroys the plugin.
-	 * @public
-	 */
 	Lazy.prototype.destroy = function() {
 		var handler, property;
 
@@ -1622,35 +1446,11 @@
 
 })(window.Zepto || window.jQuery, window, document);
 
-/**
- * AutoHeight Plugin
- * @version 2.3.4
- * @author Bartosz Wojciechowski
- * @author David Deutsch
- * @license The MIT License (MIT)
- */
 ;(function($, window, document, undefined) {
 
-	/**
-	 * Creates the auto height plugin.
-	 * @class The Auto Height Plugin
-	 * @param {Owl} carousel - The Owl Carousel
-	 */
 	var AutoHeight = function(carousel) {
-		/**
-		 * Reference to the core.
-		 * @protected
-		 * @type {Owl}
-		 */
 		this._core = carousel;
-
 		this._previousHeight = null;
-
-		/**
-		 * All event handlers.
-		 * @protected
-		 * @type {Object}
-		 */
 		this._handlers = {
 			'initialized.owl.carousel refreshed.owl.carousel': $.proxy(function(e) {
 				if (e.namespace && this._core.settings.autoHeight) {
@@ -1670,25 +1470,18 @@
 			}, this)
 		};
 
-		// set default options
 		this._core.options = $.extend({}, AutoHeight.Defaults, this._core.options);
 
-		// register event handlers
 		this._core.$element.on(this._handlers);
 		this._intervalId = null;
 		var refThis = this;
 
-		// These changes have been taken from a PR by gavrochelegnou proposed in #1575
-		// and have been made compatible with the latest jQuery version
 		$(window).on('load', function() {
 			if (refThis._core.settings.autoHeight) {
 				refThis.update();
 			}
 		});
 
-		// Autoresize the height of the carousel when window is resized
-		// When carousel has images, the height is dependent on the width
-		// and should also change on resize
 		$(window).resize(function() {
 			if (refThis._core.settings.autoHeight) {
 				if (refThis._intervalId != null) {
@@ -1703,18 +1496,11 @@
 
 	};
 
-	/**
-	 * Default options.
-	 * @public
-	 */
 	AutoHeight.Defaults = {
 		autoHeight: false,
 		autoHeightClass: 'owl-height'
 	};
 
-	/**
-	 * Updates the view.
-	 */
 	AutoHeight.prototype.update = function() {
 		var start = this._core._current,
 			end = start + this._core.settings.items,
@@ -1754,49 +1540,13 @@
 	$.fn.owlCarousel.Constructor.Plugins.AutoHeight = AutoHeight;
 
 })(window.Zepto || window.jQuery, window, document);
-
-/**
- * Video Plugin
- * @version 2.3.4
- * @author Bartosz Wojciechowski
- * @author David Deutsch
- * @license The MIT License (MIT)
- */
 ;(function($, window, document, undefined) {
 
-	/**
-	 * Creates the video plugin.
-	 * @class The Video Plugin
-	 * @param {Owl} carousel - The Owl Carousel
-	 */
 	var Video = function(carousel) {
-		/**
-		 * Reference to the core.
-		 * @protected
-		 * @type {Owl}
-		 */
 		this._core = carousel;
-
-		/**
-		 * Cache all video URLs.
-		 * @protected
-		 * @type {Object}
-		 */
 		this._videos = {};
-
-		/**
-		 * Current playing item.
-		 * @protected
-		 * @type {jQuery}
-		 */
 		this._playing = null;
 
-		/**
-		 * All event handlers.
-		 * @todo The cloned content removale is too late
-		 * @protected
-		 * @type {Object}
-		 */
 		this._handlers = {
 			'initialized.owl.carousel': $.proxy(function(e) {
 				if (e.namespace) {
@@ -1832,10 +1582,8 @@
 			}, this)
 		};
 
-		// set default options
 		this._core.options = $.extend({}, Video.Defaults, this._core.options);
 
-		// register event handlers
 		this._core.$element.on(this._handlers);
 
 		this._core.$element.on('click.owl.video', '.owl-video-play-icon', $.proxy(function(e) {
@@ -1843,22 +1591,12 @@
 		}, this));
 	};
 
-	/**
-	 * Default options.
-	 * @public
-	 */
 	Video.Defaults = {
 		video: false,
 		videoHeight: false,
 		videoWidth: false
 	};
 
-	/**
-	 * Gets the video ID and the type (YouTube/Vimeo/vzaar only).
-	 * @protected
-	 * @param {jQuery} target - The target containing the video data.
-	 * @param {jQuery} item - The item containing the video.
-	 */
 	Video.prototype.fetch = function(target, item) {
 			var type = (function() {
 					if (target.attr('data-vimeo-id')) {
@@ -1875,18 +1613,6 @@
 				url = target.attr('href');
 
 		if (url) {
-
-			/*
-					Parses the id's out of the following urls (and probably more):
-					https://www.youtube.com/watch?v=:id
-					https://youtu.be/:id
-					https://vimeo.com/:id
-					https://vimeo.com/channels/:channel/:id
-					https://vimeo.com/groups/:group/videos/:id
-					https://app.vzaar.com/videos/:id
-
-					Visual example: https://regexper.com/#(http%3A%7Chttps%3A%7C)%5C%2F%5C%2F(player.%7Cwww.%7Capp.)%3F(vimeo%5C.com%7Cyoutu(be%5C.com%7C%5C.be%7Cbe%5C.googleapis%5C.com)%7Cvzaar%5C.com)%5C%2F(video%5C%2F%7Cvideos%5C%2F%7Cembed%5C%2F%7Cchannels%5C%2F.%2B%5C%2F%7Cgroups%5C%2F.%2B%5C%2F%7Cwatch%5C%3Fv%3D%7Cv%5C%2F)%3F(%5BA-Za-z0-9._%25-%5D*)(%5C%26%5CS%2B)%3F
-			*/
 
 			id = url.match(/(http:|https:|)\/\/(player.|www.|app.)?(vimeo\.com|youtu(be\.com|\.be|be\.googleapis\.com|be\-nocookie\.com)|vzaar\.com)\/(video\/|videos\/|embed\/|channels\/.+\/|groups\/.+\/|watch\?v=|v\/)?([A-Za-z0-9._%-]*)(\&\S+)?/);
 
@@ -1916,13 +1642,6 @@
 		this.thumbnail(target, this._videos[url]);
 	};
 
-	/**
-	 * Creates video thumbnail.
-	 * @protected
-	 * @param {jQuery} target - The target containing the video data.
-	 * @param {Object} info - The video info object.
-	 * @see `fetch`
-	 */
 	Video.prototype.thumbnail = function(target, video) {
 		var tnLink,
 			icon,
@@ -1950,7 +1669,6 @@
 				target.after(icon);
 			};
 
-		// wrap video content into owl-video-wrapper div
 		target.wrap( $( '<div/>', {
 			"class": "owl-video-wrapper",
 			"style": dimensions
@@ -1961,7 +1679,6 @@
 			lazyClass = 'owl-lazy';
 		}
 
-		// custom thumbnail
 		if (customTn.length) {
 			create(customTn.attr(srcType));
 			customTn.remove();
@@ -1996,10 +1713,6 @@
 		}
 	};
 
-	/**
-	 * Stops the current video.
-	 * @public
-	 */
 	Video.prototype.stop = function() {
 		this._core.trigger('stop', null, 'video');
 		this._playing.find('.owl-video-frame').remove();
@@ -2009,11 +1722,6 @@
 		this._core.trigger('stopped', null, 'video');
 	};
 
-	/**
-	 * Starts the current video.
-	 * @public
-	 * @param {Event} event - The event arguments.
-	 */
 	Video.prototype.play = function(event) {
 		var target = $(event.target),
 			item = target.closest('.' + this._core.settings.itemClass),
@@ -2050,12 +1758,6 @@
 		this._playing = item.addClass('owl-video-playing');
 	};
 
-	/**
-	 * Checks whether an video is currently in full screen mode or not.
-	 * @todo Bad style because looks like a readonly method but changes members.
-	 * @protected
-	 * @returns {Boolean}
-	 */
 	Video.prototype.isInFullScreen = function() {
 		var element = document.fullscreenElement || document.mozFullScreenElement ||
 				document.webkitFullscreenElement;
@@ -2063,9 +1765,6 @@
 		return element && $(element).parent().hasClass('owl-video-frame');
 	};
 
-	/**
-	 * Destroys the plugin.
-	 */
 	Video.prototype.destroy = function() {
 		var handler, property;
 
@@ -2083,20 +1782,8 @@
 
 })(window.Zepto || window.jQuery, window, document);
 
-/**
- * Animate Plugin
- * @version 2.3.4
- * @author Bartosz Wojciechowski
- * @author David Deutsch
- * @license The MIT License (MIT)
- */
 ;(function($, window, document, undefined) {
 
-	/**
-	 * Creates the animate plugin.
-	 * @class The Navigation Plugin
-	 * @param {Owl} scope - The Owl Carousel
-	 */
 	var Animate = function(scope) {
 		this.core = scope;
 		this.core.options = $.extend({}, Animate.Defaults, this.core.options);
@@ -2126,20 +1813,11 @@
 		this.core.$element.on(this.handlers);
 	};
 
-	/**
-	 * Default options.
-	 * @public
-	 */
 	Animate.Defaults = {
 		animateOut: false,
 		animateIn: false
 	};
 
-	/**
-	 * Toggles the animation classes whenever an translations starts.
-	 * @protected
-	 * @returns {Boolean|undefined}
-	 */
 	Animate.prototype.swap = function() {
 
 		if (this.core.settings.items !== 1) {
@@ -2186,10 +1864,6 @@
 		this.core.onTransitionEnd();
 	};
 
-	/**
-	 * Destroys the plugin.
-	 * @public
-	 */
 	Animate.prototype.destroy = function() {
 		var handler, property;
 
@@ -2205,62 +1879,14 @@
 
 })(window.Zepto || window.jQuery, window, document);
 
-/**
- * Autoplay Plugin
- * @version 2.3.4
- * @author Bartosz Wojciechowski
- * @author Artus Kolanowski
- * @author David Deutsch
- * @author Tom De Caluwé
- * @license The MIT License (MIT)
- */
 ;(function($, window, document, undefined) {
 
-	/**
-	 * Creates the autoplay plugin.
-	 * @class The Autoplay Plugin
-	 * @param {Owl} scope - The Owl Carousel
-	 */
 	var Autoplay = function(carousel) {
-		/**
-		 * Reference to the core.
-		 * @protected
-		 * @type {Owl}
-		 */
 		this._core = carousel;
-
-		/**
-		 * The autoplay timeout id.
-		 * @type {Number}
-		 */
 		this._call = null;
-
-		/**
-		 * Depending on the state of the plugin, this variable contains either
-		 * the start time of the timer or the current timer value if it's
-		 * paused. Since we start in a paused state we initialize the timer
-		 * value.
-		 * @type {Number}
-		 */
 		this._time = 0;
-
-		/**
-		 * Stores the timeout currently used.
-		 * @type {Number}
-		 */
 		this._timeout = 0;
-
-		/**
-		 * Indicates whenever the autoplay is paused.
-		 * @type {Boolean}
-		 */
 		this._paused = true;
-
-		/**
-		 * All event handlers.
-		 * @protected
-		 * @type {Object}
-		 */
 		this._handlers = {
 			'changed.owl.carousel': $.proxy(function(e) {
 				if (e.namespace && e.property.name === 'settings') {
@@ -2270,8 +1896,6 @@
 						this.stop();
 					}
 				} else if (e.namespace && e.property.name === 'position' && this._paused) {
-					// Reset the timer. This code is triggered when the position
-					// of the carousel was changed through user interaction.
 					this._time = 0;
 				}
 			}, this),
@@ -2312,17 +1936,12 @@
 			}, this)
 		};
 
-		// register event handlers
 		this._core.$element.on(this._handlers);
 
-		// set default options
 		this._core.options = $.extend({}, Autoplay.Defaults, this._core.options);
 	};
 
-	/**
-	 * Default options.
-	 * @public
-	 */
+
 	Autoplay.Defaults = {
 		autoplay: false,
 		autoplayTimeout: 5000,
@@ -2330,11 +1949,6 @@
 		autoplaySpeed: false
 	};
 
-	/**
-	 * Transition to the next slide and set a timeout for the next transition.
-	 * @private
-	 * @param {Number} [speed] - The animation speed for the animations.
-	 */
 	Autoplay.prototype._next = function(speed) {
 		this._call = window.setTimeout(
 			$.proxy(this._next, this, speed),
@@ -2347,20 +1961,10 @@
 		this._core.next(speed || this._core.settings.autoplaySpeed);
 	}
 
-	/**
-	 * Reads the current timer value when the timer is playing.
-	 * @public
-	 */
 	Autoplay.prototype.read = function() {
 		return new Date().getTime() - this._time;
 	};
 
-	/**
-	 * Starts the autoplay.
-	 * @public
-	 * @param {Number} [timeout] - The interval before the next animation starts.
-	 * @param {Number} [speed] - The animation speed for the animations.
-	 */
 	Autoplay.prototype.play = function(timeout, speed) {
 		var elapsed;
 
@@ -2370,30 +1974,21 @@
 
 		timeout = timeout || this._core.settings.autoplayTimeout;
 
-		// Calculate the elapsed time since the last transition. If the carousel
-		// wasn't playing this calculation will yield zero.
 		elapsed = Math.min(this._time % (this._timeout || timeout), timeout);
 
 		if (this._paused) {
-			// Start the clock.
 			this._time = this.read();
 			this._paused = false;
 		} else {
-			// Clear the active timeout to allow replacement.
 			window.clearTimeout(this._call);
 		}
 
-		// Adjust the origin of the timer to match the new timeout value.
 		this._time += this.read() % timeout - elapsed;
 
 		this._timeout = timeout;
 		this._call = window.setTimeout($.proxy(this._next, this, speed), timeout - elapsed);
 	};
 
-	/**
-	 * Stops the autoplay.
-	 * @public
-	 */
 	Autoplay.prototype.stop = function() {
 		if (this._core.is('rotating')) {
 			// Reset the clock.
@@ -2405,13 +2000,8 @@
 		}
 	};
 
-	/**
-	 * Pauses the autoplay.
-	 * @public
-	 */
 	Autoplay.prototype.pause = function() {
 		if (this._core.is('rotating') && !this._paused) {
-			// Pause the clock.
 			this._time = this.read();
 			this._paused = true;
 
@@ -2419,9 +2009,6 @@
 		}
 	};
 
-	/**
-	 * Destroys the plugin.
-	 */
 	Autoplay.prototype.destroy = function() {
 		var handler, property;
 
@@ -2439,79 +2026,29 @@
 
 })(window.Zepto || window.jQuery, window, document);
 
-/**
- * Navigation Plugin
- * @version 2.3.4
- * @author Artus Kolanowski
- * @author David Deutsch
- * @license The MIT License (MIT)
- */
 ;(function($, window, document, undefined) {
 	'use strict';
 
-	/**
-	 * Creates the navigation plugin.
-	 * @class The Navigation Plugin
-	 * @param {Owl} carousel - The Owl Carousel.
-	 */
 	var Navigation = function(carousel) {
-		/**
-		 * Reference to the core.
-		 * @protected
-		 * @type {Owl}
-		 */
+
 		this._core = carousel;
 
-		/**
-		 * Indicates whether the plugin is initialized or not.
-		 * @protected
-		 * @type {Boolean}
-		 */
 		this._initialized = false;
 
-		/**
-		 * The current paging indexes.
-		 * @protected
-		 * @type {Array}
-		 */
 		this._pages = [];
 
-		/**
-		 * All DOM elements of the user interface.
-		 * @protected
-		 * @type {Object}
-		 */
 		this._controls = {};
 
-		/**
-		 * Markup for an indicator.
-		 * @protected
-		 * @type {Array.<String>}
-		 */
 		this._templates = [];
 
-		/**
-		 * The carousel element.
-		 * @type {jQuery}
-		 */
 		this.$element = this._core.$element;
 
-		/**
-		 * Overridden methods of the carousel.
-		 * @protected
-		 * @type {Object}
-		 */
 		this._overrides = {
 			next: this._core.next,
 			prev: this._core.prev,
 			to: this._core.to
 		};
 
-		/**
-		 * All event handlers.
-		 * @protected
-		 * @type {Object}
-		 */
 		this._handlers = {
 			'prepared.owl.carousel': $.proxy(function(e) {
 				if (e.namespace && this._core.settings.dotsData) {
@@ -2554,18 +2091,10 @@
 			}, this)
 		};
 
-		// set default options
 		this._core.options = $.extend({}, Navigation.Defaults, this._core.options);
 
-		// register event handlers
 		this.$element.on(this._handlers);
 	};
-
-	/**
-	 * Default options.
-	 * @public
-	 * @todo Rename `slideBy` to `navBy`
-	 */
 	Navigation.Defaults = {
 		nav: false,
 		navText: [
@@ -2590,15 +2119,10 @@
 		dotsContainer: false
 	};
 
-	/**
-	 * Initializes the layout of the plugin and extends the carousel.
-	 * @protected
-	 */
 	Navigation.prototype.initialize = function() {
 		var override,
 			settings = this._core.settings;
 
-		// create DOM structure for relative navigation
 		this._controls.$relative = (settings.navContainer ? $(settings.navContainer)
 			: $('<div>').addClass(settings.navContainerClass).appendTo(this.$element)).addClass('disabled');
 
@@ -2617,7 +2141,6 @@
 				this.next(settings.navSpeed);
 			}, this));
 
-		// create DOM structure for absolute navigation
 		if (!settings.dotsData) {
 			this._templates = [ $('<button role="button">')
 				.addClass(settings.dotClass)
@@ -2637,29 +2160,11 @@
 			this.to(index, settings.dotsSpeed);
 		}, this));
 
-		/*$el.on('focusin', function() {
-			$(document).off(".carousel");
-
-			$(document).on('keydown.carousel', function(e) {
-				if(e.keyCode == 37) {
-					$el.trigger('prev.owl')
-				}
-				if(e.keyCode == 39) {
-					$el.trigger('next.owl')
-				}
-			});
-		});*/
-
-		// override public methods of the carousel
 		for (override in this._overrides) {
 			this._core[override] = $.proxy(this[override], this);
 		}
 	};
 
-	/**
-	 * Destroys the plugin.
-	 * @protected
-	 */
 	Navigation.prototype.destroy = function() {
 		var handler, control, property, override, settings;
 		settings = this._core.settings;
@@ -2682,10 +2187,6 @@
 		}
 	};
 
-	/**
-	 * Updates the internal state.
-	 * @protected
-	 */
 	Navigation.prototype.update = function() {
 		var i, j, k,
 			lower = this._core.clones().length / 2,
@@ -2718,11 +2219,6 @@
 		}
 	};
 
-	/**
-	 * Draws the user interface.
-	 * @todo The option `dotsData` wont work.
-	 * @protected
-	 */
 	Navigation.prototype.draw = function() {
 		var difference,
 			settings = this._core.settings,
@@ -2755,11 +2251,6 @@
 		}
 	};
 
-	/**
-	 * Extends event data.
-	 * @protected
-	 * @param {Event} event - The event object which gets thrown.
-	 */
 	Navigation.prototype.onTrigger = function(event) {
 		var settings = this._core.settings;
 
@@ -2771,11 +2262,6 @@
 		};
 	};
 
-	/**
-	 * Gets the current page position of the carousel.
-	 * @protected
-	 * @returns {Number}
-	 */
 	Navigation.prototype.current = function() {
 		var current = this._core.relative(this._core.current());
 		return $.grep(this._pages, $.proxy(function(page, index) {
@@ -2783,11 +2269,6 @@
 		}, this)).pop();
 	};
 
-	/**
-	 * Gets the current succesor/predecessor position.
-	 * @protected
-	 * @returns {Number}
-	 */
 	Navigation.prototype.getPosition = function(successor) {
 		var position, length,
 			settings = this._core.settings;
@@ -2806,31 +2287,14 @@
 		return position;
 	};
 
-	/**
-	 * Slides to the next item or page.
-	 * @public
-	 * @param {Number} [speed=false] - The time in milliseconds for the transition.
-	 */
 	Navigation.prototype.next = function(speed) {
 		$.proxy(this._overrides.to, this._core)(this.getPosition(true), speed);
 	};
 
-	/**
-	 * Slides to the previous item or page.
-	 * @public
-	 * @param {Number} [speed=false] - The time in milliseconds for the transition.
-	 */
 	Navigation.prototype.prev = function(speed) {
 		$.proxy(this._overrides.to, this._core)(this.getPosition(false), speed);
 	};
 
-	/**
-	 * Slides to the specified item or page.
-	 * @public
-	 * @param {Number} position - The position of the item or page.
-	 * @param {Number} [speed] - The time in milliseconds for the transition.
-	 * @param {Boolean} [standard=false] - Whether to use the standard behaviour or not.
-	 */
 	Navigation.prototype.to = function(position, speed, standard) {
 		var length;
 
@@ -2846,47 +2310,17 @@
 
 })(window.Zepto || window.jQuery, window, document);
 
-/**
- * Hash Plugin
- * @version 2.3.4
- * @author Artus Kolanowski
- * @author David Deutsch
- * @license The MIT License (MIT)
- */
 ;(function($, window, document, undefined) {
 	'use strict';
 
-	/**
-	 * Creates the hash plugin.
-	 * @class The Hash Plugin
-	 * @param {Owl} carousel - The Owl Carousel
-	 */
 	var Hash = function(carousel) {
-		/**
-		 * Reference to the core.
-		 * @protected
-		 * @type {Owl}
-		 */
+
 		this._core = carousel;
 
-		/**
-		 * Hash index for the items.
-		 * @protected
-		 * @type {Object}
-		 */
 		this._hashes = {};
 
-		/**
-		 * The carousel element.
-		 * @type {jQuery}
-		 */
 		this.$element = this._core.$element;
 
-		/**
-		 * All event handlers.
-		 * @protected
-		 * @type {Object}
-		 */
 		this._handlers = {
 			'initialized.owl.carousel': $.proxy(function(e) {
 				if (e.namespace && this._core.settings.startPosition === 'URLHash') {
@@ -2920,13 +2354,10 @@
 			}, this)
 		};
 
-		// set default options
 		this._core.options = $.extend({}, Hash.Defaults, this._core.options);
 
-		// register the event handlers
 		this.$element.on(this._handlers);
 
-		// register event listener for hash navigation
 		$(window).on('hashchange.owl.navigation', $.proxy(function(e) {
 			var hash = window.location.hash.substring(1),
 				items = this._core.$stage.children(),
@@ -2940,18 +2371,10 @@
 		}, this));
 	};
 
-	/**
-	 * Default options.
-	 * @public
-	 */
 	Hash.Defaults = {
 		URLhashListener: false
 	};
 
-	/**
-	 * Destroys the plugin.
-	 * @public
-	 */
 	Hash.prototype.destroy = function() {
 		var handler, property;
 
@@ -2969,15 +2392,6 @@
 
 })(window.Zepto || window.jQuery, window, document);
 
-/**
- * Support Plugin
- *
- * @version 2.3.4
- * @author Vivid Planet Software GmbH
- * @author Artus Kolanowski
- * @author David Deutsch
- * @license The MIT License (MIT)
- */
 ;(function($, window, document, undefined) {
 
 	var style = $('<support>').get(0).style,
@@ -3034,19 +2448,16 @@
 	}
 
 	if (tests.csstransitions()) {
-		/* jshint -W053 */
 		$.support.transition = new String(prefixed('transition'))
 		$.support.transition.end = events.transition.end[ $.support.transition ];
 	}
 
 	if (tests.cssanimations()) {
-		/* jshint -W053 */
 		$.support.animation = new String(prefixed('animation'))
 		$.support.animation.end = events.animation.end[ $.support.animation ];
 	}
 
 	if (tests.csstransforms()) {
-		/* jshint -W053 */
 		$.support.transform = new String(prefixed('transform'));
 		$.support.transform3d = tests.csstransforms3d();
 	}

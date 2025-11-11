@@ -22,9 +22,7 @@ public class PaymentService {
     @Transactional
     public void processPaymentWithSeats(User user, Movie movie, String hour, List<String> seats,
                                         String cardName, String cardNumber, String expiry, String cvc) {
-        // In real system, integrate with payment gateway here
 
-        // Save payment record
         Payment payment = Payment.builder()
                 .user(user)
                 .movie(movie)
@@ -37,7 +35,6 @@ public class PaymentService {
 
         paymentRepository.save(payment);
 
-        // Mark the specific seats as paid
         ticketService.confirmPayment(user, movie, hour, seats);
     }
 }

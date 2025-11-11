@@ -51,11 +51,7 @@ public class SecurityConfig {
                                 "/images/**"
                         ).permitAll()
 
-                        // Require login ONLY for booking
-                        // SecurityConfig.java inside authorizeHttpRequests:
                         .requestMatchers("/book/**", "/reservation/**").authenticated()
-
-                        // Everything else also public (optional for dev phase)
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form

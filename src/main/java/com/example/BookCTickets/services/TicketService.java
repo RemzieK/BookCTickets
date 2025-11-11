@@ -16,21 +16,19 @@ public class TicketService {
     private final TicketRepository ticketRepository;
 
     public List<String> getOccupiedSeats(Long movieId, String hour) {
-        return ticketRepository.findSeatsByMovieIdAndHour(movieId, hour);
+        return ticketRepository.findOccupiedSeatsByMovieIdAndHour(movieId, hour);
     }
 
     @Transactional
     public void reserveSeats(User user, Movie movie, String hour, List<String> seats) {
         String room = movie.getRoom();
 
-        // Check if any seat is already occupied (paid)
         for (String seat : seats) {
             if (ticketRepository.existsByMovieIdAndHourAndSeatAndPaid(movie.getId(), hour, seat, true)) {
-                throw new IllegalStateException("Seat " + seat + " is already booked and paid for.");
+                throw new IllegalStateException("Seat " + seat + " is already booked and paid for at " + hour);
             }
         }
 
-        // Remove any existing temporary reservations for these seats by this user
         for (String seat : seats) {
             Ticket existing = ticketRepository.findByMovieIdAndHourAndSeatAndUser(
                     movie.getId(), hour, seat, user);
@@ -39,7 +37,6 @@ public class TicketService {
             }
         }
 
-        // Create new reservations
         List<Ticket> tickets = seats.stream()
                 .map(seat -> Ticket.builder()
                         .user(user)
@@ -63,6 +60,17 @@ public class TicketService {
             if (ticket != null) {
                 ticket.setPaid(true);
                 ticketRepository.save(ticket);
+            } else {
+                Ticket newTicket = Ticket.builder()
+                        .user(user)
+                        .movie(movie)
+                        .seat(seat)
+                        .hour(hour)
+                        .room(movie.getRoom())
+                        .price(movie.getTicketPrice())
+                        .paid(true)
+                        .build();
+                ticketRepository.save(newTicket);
             }
         }
     }

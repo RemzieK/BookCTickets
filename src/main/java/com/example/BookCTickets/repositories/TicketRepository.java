@@ -10,23 +10,20 @@ import java.util.List;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-    // Check if a paid ticket exists for this seat
     boolean existsByMovieIdAndHourAndSeatAndPaid(Long movieId, String hour, String seat, Boolean paid);
-
-    // Find a specific reservation
     Ticket findByMovieIdAndHourAndSeatAndPaid(Long movieId, String hour, String seat, Boolean paid);
 
-    // Find user's reservation for a specific seat
     Ticket findByMovieIdAndHourAndSeatAndUser(Long movieId, String hour, String seat, User user);
 
-    // Get occupied (paid) seats
-    @Query("select t.seat from Ticket t where t.movie.id = :movieId and t.hour = :hour and t.paid = true")
-    List<String> findSeatsByMovieIdAndHour(@Param("movieId") Long movieId, @Param("hour") String hour);
+    @Query("SELECT t.seat FROM Ticket t WHERE t.movie.id = :movieId AND t.hour = :hour AND t.paid = true")
+    List<String> findOccupiedSeatsByMovieIdAndHour(@Param("movieId") Long movieId, @Param("hour") String hour);
+
+    @Query("SELECT t.seat FROM Ticket t WHERE t.movie.id = :movieId AND t.hour = :hour AND t.paid = false")
+    List<String> findTemporaryReservationsByMovieIdAndHour(@Param("movieId") Long movieId, @Param("hour") String hour);
 
     List<Ticket> findByUser(User user);
 
     long countByPaid(Boolean paid);
 
-    // Clean up expired temporary reservations (optional)
-    void deleteByPaidFalse();
+    void deleteByPaidFalseAndMovieIdAndHour(Long movieId, String hour);
 }

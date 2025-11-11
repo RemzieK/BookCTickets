@@ -1,11 +1,9 @@
-// Get movie info from root data attributes
 const root = document.getElementById('booking-root');
 const movieId = Number(root.dataset.movieId);
 const pricePerSeat = Number(root.dataset.pricePerSeat);
 
 console.log('Movie ID:', movieId, 'Price per seat:', pricePerSeat);
 
-// Configurable seating layout
 const sideColumns = 4;
 const centerColumns = 10;
 const rows = 6;
@@ -14,7 +12,6 @@ const rowLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
 let selectedHour = null;
 let reservedSeats = [];
 
-// Build the seat grid
 function buildSeatGrid() {
     console.log('Building seat grid...');
 
@@ -33,15 +30,13 @@ function buildSeatGrid() {
             return;
         }
 
-        // Clear existing content
         table.innerHTML = '';
 
         const thead = document.createElement('thead');
         const tbody = document.createElement('tbody');
 
-        // Create header row
         let headerRow = document.createElement('tr');
-        headerRow.appendChild(document.createElement('td')); // Empty cell for row labels
+        headerRow.appendChild(document.createElement('td'));
 
         for (let i = 0; i < group.columns; i++) {
             let headerCell = document.createElement('td');
@@ -49,22 +44,19 @@ function buildSeatGrid() {
             headerRow.appendChild(headerCell);
             seatNumber++;
         }
-        seatNumber -= group.columns; // Reset for body rows
+        seatNumber -= group.columns;
 
         thead.appendChild(headerRow);
         table.appendChild(thead);
         table.appendChild(tbody);
 
-        // Create body rows
         for (let i = 0; i < rows; i++) {
             let bodyRow = document.createElement('tr');
 
-            // Row label
             let labelCell = document.createElement('td');
             labelCell.textContent = rowLetters[i];
             bodyRow.appendChild(labelCell);
 
-            // Seat buttons
             for (let j = 0; j < group.columns; j++) {
                 let cell = document.createElement('td');
                 let button = document.createElement('button');
@@ -74,29 +66,42 @@ function buildSeatGrid() {
                 button.dataset.seat = seatId;
                 button.innerHTML = `<i class="material-icons">event_seat</i><br>${seatId}`;
 
-                button.addEventListener('click', () => {
-                    if (!selectedHour) {
-                        alert('Please select a time first.');
-                        return;
-                    }
-                    if (!button.classList.contains('occupied')) {
-                        button.classList.toggle('selected');
-                        button.classList.toggle('not-selected');
-                        updateSelectionSummary();
-                    }
-                });
-
                 cell.appendChild(button);
                 bodyRow.appendChild(cell);
                 seatNumber++;
             }
-            seatNumber -= group.columns; // Reset for next row
+            seatNumber -= group.columns;
             tbody.appendChild(bodyRow);
         }
-        seatNumber += group.columns; // Move to next group
+        seatNumber += group.columns;
     });
 
+    setupSeatSelection();
     console.log('Seat grid built successfully');
+}
+
+function setupSeatSelection() {
+    document.querySelectorAll('.seat-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            if (!selectedHour) {
+                alert('Please select a time first.');
+                return;
+            }
+
+            const seatId = button.dataset.seat;
+
+            if (button.classList.contains('occupied')) {
+                alert(`Seat ${seatId} is already booked for ${selectedHour}`);
+                return;
+            }
+
+            if (!button.classList.contains('occupied')) {
+                button.classList.toggle('selected');
+                button.classList.toggle('not-selected');
+                updateSelectionSummary();
+            }
+        });
+    });
 }
 
 function markAsOccupied(seatId) {
@@ -108,51 +113,47 @@ function markAsOccupied(seatId) {
     }
 }
 
-function resetSeats() {
-    document.querySelectorAll('.seat-btn').forEach(b => {
-        if (!b.classList.contains('occupied')) {
-            b.classList.remove('selected');
-            b.classList.add('not-selected');
-            b.disabled = false;
+function clearAllSelections() {
+    document.querySelectorAll('.seat-btn').forEach(button => {
+        if (!button.classList.contains('occupied')) {
+            button.classList.remove('selected');
+            button.classList.add('not-selected');
+            button.disabled = false;
         }
     });
+
     reservedSeats = [];
+
+    document.getElementById('selected-seats').textContent = '';
+    document.getElementById('total-price').textContent = '';
+    document.getElementById('reserve-btn').style.display = 'none';
+    document.getElementById('paymentSection').style.display = 'none';
 }
 
-// Hour selection handlers
 function setupHourButtons() {
     document.querySelectorAll('.hour-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
             console.log('Hour clicked:', btn.dataset.hour);
 
-            // Remove active class from all buttons
             document.querySelectorAll('.hour-btn').forEach(b => {
                 b.classList.remove('active');
                 b.style.backgroundColor = '';
                 b.style.color = '';
             });
 
-            // Add active class to clicked button
             btn.classList.add('active');
             btn.style.backgroundColor = '#FFFFFA';
             btn.style.color = '#2b99b1';
 
             selectedHour = btn.dataset.hour;
 
-            // Clear UI
-            resetSeats();
-            document.getElementById('selected-seats').textContent = '';
-            document.getElementById('total-price').textContent = '';
-            document.getElementById('reserve-btn').style.display = 'none';
-            document.getElementById('paymentSection').style.display = 'none';
+            clearAllSelections();
 
-            // Load occupied seats for this hour
             await loadOccupiedSeats();
         });
     });
 }
 
-// Load occupied seats for current hour
 async function loadOccupiedSeats() {
     if (!selectedHour) return;
 
@@ -163,7 +164,13 @@ async function loadOccupiedSeats() {
         if (!resp.ok) throw new Error('Failed to load occupied seats');
 
         const occupiedSeats = await resp.json();
-        console.log('Occupied seats:', occupiedSeats);
+        console.log('Occupied seats for', selectedHour + ':', occupiedSeats);
+
+        document.querySelectorAll('.seat-btn.occupied').forEach(seat => {
+            seat.classList.remove('occupied');
+            seat.classList.add('not-selected');
+            seat.disabled = false;
+        });
 
         occupiedSeats.forEach(seat => markAsOccupied(seat));
     } catch (e) {
@@ -172,7 +179,6 @@ async function loadOccupiedSeats() {
     }
 }
 
-// Update selection summary
 function updateSelectionSummary() {
     const selected = Array.from(document.querySelectorAll('.seat-btn.selected')).map(b => b.dataset.seat);
     const total = selected.length * pricePerSeat;
@@ -188,7 +194,6 @@ function updateSelectionSummary() {
     document.getElementById('reserve-btn').style.display = selected.length > 0 ? 'inline-block' : 'none';
 }
 
-// Show selection summary
 document.getElementById('show-seats').addEventListener('click', () => {
     if (!selectedHour) {
         alert('Please select a time first.');
@@ -197,7 +202,6 @@ document.getElementById('show-seats').addEventListener('click', () => {
     updateSelectionSummary();
 });
 
-// Reserve seats temporarily
 document.getElementById('reserve-btn').addEventListener('click', async () => {
     if (!selectedHour) {
         alert('Please select a time first.');
@@ -226,7 +230,7 @@ document.getElementById('reserve-btn').addEventListener('click', async () => {
         if (resp.status === 409) {
             alert(result.message);
             await loadOccupiedSeats();
-            resetSeats();
+            clearAllSelections();
             return;
         }
 
@@ -234,12 +238,20 @@ document.getElementById('reserve-btn').addEventListener('click', async () => {
             throw new Error(result.message || 'Reservation failed');
         }
 
-        // Success - show payment form
         reservedSeats = selected;
         document.getElementById('paymentSection').style.display = 'block';
         document.getElementById('reserve-btn').style.display = 'none';
 
-        alert('Seats reserved temporarily! Please complete payment.');
+        selected.forEach(seatId => {
+            const seat = document.querySelector(`button[data-seat="${seatId}"]`);
+            if (seat) {
+                seat.classList.add('occupied');
+                seat.classList.remove('selected', 'not-selected');
+                seat.disabled = true;
+            }
+        });
+
+        alert('Seats reserved temporarily! Please complete payment within 10 minutes.');
 
     } catch (e) {
         console.error('Reservation error:', e);
@@ -247,7 +259,6 @@ document.getElementById('reserve-btn').addEventListener('click', async () => {
     }
 });
 
-// Process payment
 document.getElementById('buy-btn').addEventListener('click', async () => {
     if (!selectedHour || reservedSeats.length === 0) {
         alert('Please reserve seats first.');
@@ -264,16 +275,32 @@ document.getElementById('buy-btn').addEventListener('click', async () => {
         return;
     }
 
+    const cleanCardNumber = cardNumber.replace(/\s/g, '');
+    if (!/^\d{13,19}$/.test(cleanCardNumber)) {
+        alert('Please enter a valid card number (13-19 digits).');
+        return;
+    }
+
+    if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+        alert('Please enter expiry date in MM/YY format.');
+        return;
+    }
+
+    if (!/^\d{3,4}$/.test(cvc)) {
+        alert('Please enter a valid CVC (3-4 digits).');
+        return;
+    }
+
     try {
         const paymentData = {
             cardName,
-            cardNumber: cardNumber.replace(/\s/g, ''),
+            cardNumber: cleanCardNumber,
             expiry,
             cvc,
             seats: reservedSeats
         };
 
-        console.log('Processing payment for seats:', reservedSeats);
+        console.log('Processing payment for seats:', reservedSeats, 'at hour:', selectedHour);
 
         const resp = await fetch(`/reservation/${movieId}/confirm-payment?hour=${encodeURIComponent(selectedHour)}`, {
             method: 'POST',
@@ -289,30 +316,64 @@ document.getElementById('buy-btn').addEventListener('click', async () => {
             return;
         }
 
-        alert('Payment successful! Your booking is confirmed.');
+        alert('Payment successful! Your booking is confirmed.\nYou will be redirected to the movies page.');
 
-        // Redirect to movies page
-        window.location.href = '/movies';
+        const lastFour = cardNumber.slice(-4);
+        alert(`Booking confirmed!\nSeats: ${reservedSeats.join(', ')}\nTime: ${selectedHour}\nCard: **** **** **** ${lastFour}`);
+
+        setTimeout(() => {
+            window.location.href = '/movies';
+        }, 2000);
 
     } catch (e) {
         console.error('Payment error:', e);
-        alert('Payment failed due to a network error.');
+        alert('Payment failed due to a network error. Please try again.');
     }
 });
 
-// Initialize everything when page loads
+function clearPaymentForm() {
+    document.querySelector('[name="cardName"]').value = '';
+    document.querySelector('[name="cardNumber"]').value = '';
+    document.querySelector('[name="expiry"]').value = '';
+    document.querySelector('[name="cvc"]').value = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        clearAllSelections();
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing booking page...');
 
     buildSeatGrid();
     setupHourButtons();
 
-    // Auto-select first hour
-    const firstHourBtn = document.querySelector('.hour-btn');
-    if (firstHourBtn) {
-        console.log('Auto-selecting first hour:', firstHourBtn.dataset.hour);
-        firstHourBtn.click();
-    } else {
-        console.log('No hour buttons found');
-    }
+    setTimeout(() => {
+        const firstHourBtn = document.querySelector('.hour-btn');
+        if (firstHourBtn) {
+            console.log('Auto-selecting first hour:', firstHourBtn.dataset.hour);
+            firstHourBtn.click();
+        } else {
+            console.log('No hour buttons found');
+        }
+    }, 100);
 });
+
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    }).format(amount);
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        buildSeatGrid,
+        setupHourButtons,
+        loadOccupiedSeats,
+        updateSelectionSummary,
+        clearAllSelections
+    };
+}

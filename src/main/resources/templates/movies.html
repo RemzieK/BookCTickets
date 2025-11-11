@@ -82,15 +82,15 @@
 
         <ul class="trending-filter">
             <li><a class="is_active" href="#!" data-filter="*">Show All</a></li>
-            <li><a href="#!" data-filter=".adventure">Adventure</a></li>
-            <li><a href="#!" data-filter=".romance">Romance</a></li>
-            <li><a href="#!" data-filter=".action">Action</a></li>
+            <li><a href="#!" data-filter="adventure">Adventure</a></li>
+            <li><a href="#!" data-filter="romance">Romance</a></li>
+            <li><a href="#!" data-filter="action">Action</a></li>
         </ul>
 
-        <div class="row trending-box">
+        <div class="row trending-box" id="movies-container">
             <div class="col-lg-3 col-md-6 mb-30 trending-items"
                  th:each="movie : ${movies}"
-                 th:classappend="${movie.genre.toLowerCase()}">
+                 th:classappend="${#strings.toLowerCase(movie.genre)}">
                 <div class="item">
                     <div class="thumb">
                         <img th:src="@{${movie.imageUrl}}" alt="Movie Image" class="img-fluid movie-img">
@@ -108,9 +108,16 @@
                 </div>
             </div>
         </div>
+
+        <!-- No results message -->
+        <div id="no-results" class="text-center" style="display: none;">
+            <h4>No movies found</h4>
+            <p>Try selecting a different genre or search term.</p>
+        </div>
     </div>
 </div>
 
+<!-- Your modals here -->
 <div th:each="movie : ${movies}">
     <div class="modal fade" th:id="${'movieModal' + movie.id}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">

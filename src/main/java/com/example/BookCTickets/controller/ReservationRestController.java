@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -51,7 +50,6 @@ public class ReservationRestController {
         if (movie == null) return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Map.of("message", "Movie not found"));
 
-        // Fix: Get user from principal correctly
         User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
 
         try {

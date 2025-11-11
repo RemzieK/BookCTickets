@@ -37,7 +37,7 @@ public class UserService {
     public Map<Long, Integer> getTicketCounts() {
         return findAll().stream()
                 .collect(Collectors.toMap(User::getId, u ->
-                        ticketRepository.findByUser(u).size() // Count tickets instead of summing quantity
+                        ticketRepository.findByUser(u).size()
                 ));
     }
 }
