@@ -621,6 +621,54 @@ img {
     color: #ee626b;
   }
 }
+.view-details {
+  display: inline-block;
+  background-color: #ee626b;
+  color: #fff;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 500;
+
+  /* Smaller padding (top/bottom, left/right) */
+  padding: 6px 18px;
+
+  /* Remove fixed height */
+  height: auto;
+  line-height: normal;
+
+  border: none;
+  border-radius: 20px;
+  transition: all .3s;
+
+  /* Center under title */
+  margin: 10px auto 0;
+  display: block;
+}
+/* Shared button style (matches View Details) */
+.book-ticket-btn,
+.login-book-btn {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 20px;
+  border: none;
+  transition: all 0.3s;
+  text-decoration: none;
+  color: #fff;
+}
+
+/* Pinkish button like "View Details" */
+.book-ticket-btn {
+  background-color: #ee626b;
+}
+
+/* Yellow button */
+.login-book-btn {
+  background-color: #ffa220;
+}
+
 
 /*
 ---------------------------------------------

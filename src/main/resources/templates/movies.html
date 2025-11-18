@@ -99,7 +99,7 @@
                     <div class="down-content">
                         <span class="category" th:text="${movie.genre}">Genre</span>
                         <h4 th:text="${movie.title}">Movie Title</h4>
-                        <button class="btn btn-primary mt-2"
+                        <button class="view-details"
                                 data-bs-toggle="modal"
                                 th:attr="data-bs-target=${'#movieModal' + movie.id}">
                             View Details
@@ -144,12 +144,11 @@
                 </div>
                 <div class="modal-footer">
                     <span sec:authorize="isAuthenticated()">
-                        <a th:href="@{'/book/' + ${movie.id}}" class="btn btn-success">Book a Ticket</a>
+                        <a th:href="@{'/book/' + ${movie.id}}" class="book-ticket-btn">Book a Ticket</a>
                     </span>
                     <span sec:authorize="isAnonymous()">
-                        <a th:href="@{/login}" class="btn btn-secondary">Login to Book</a>
+                        <a th:href="@{/login}" class="login-book-btn">Login to Book</a>
                     </span>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

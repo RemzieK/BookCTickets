@@ -102,3 +102,49 @@ document.addEventListener('DOMContentLoaded', () => {
         openTab(tab);
     }
 });
+// Client-side file size check (e.g., 10MB limit)
+document.addEventListener("DOMContentLoaded", () => {
+    const MAX_SIZE_MB = 10;
+    const fileInputs = document.querySelectorAll('input[type="file"][name="imageFile"]');
+
+    fileInputs.forEach(input => {
+        input.addEventListener('change', event => {
+            const file = event.target.files[0];
+            if (file && file.size > MAX_SIZE_MB * 1024 * 1024) {
+                // Show a nice styled warning message
+                showUploadError(`File too large! Please select an image smaller than ${MAX_SIZE_MB} MB.`);
+                event.target.value = ""; // reset the file input
+            }
+        });
+    });
+});
+
+// Display a popup-style error message at the top
+function showUploadError(message) {
+    // Remove old message if any
+    const oldMsg = document.getElementById('upload-error-msg');
+    if (oldMsg) oldMsg.remove();
+
+    const msg = document.createElement('div');
+    msg.id = 'upload-error-msg';
+    msg.innerText = message;
+    msg.style.position = 'fixed';
+    msg.style.top = '20px';
+    msg.style.left = '50%';
+    msg.style.transform = 'translateX(-50%)';
+    msg.style.background = 'linear-gradient(to right, #b00020, #ff4d4d)';
+    msg.style.color = 'white';
+    msg.style.padding = '12px 20px';
+    msg.style.borderRadius = '8px';
+    msg.style.fontWeight = 'bold';
+    msg.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+    msg.style.zIndex = '2000';
+    msg.style.transition = 'opacity 0.3s ease';
+    document.body.appendChild(msg);
+
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+        msg.style.opacity = '0';
+        setTimeout(() => msg.remove(), 300);
+    }, 4000);
+}

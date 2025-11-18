@@ -22,15 +22,17 @@ h1 {
 }
 
 .screen {
+  max-width: 600px;
+  width: 80%;               /* takes 80% of parent width */
   text-align: center;
   font-size: 24px;
   color: #fff;
   background-color: #2b99b1;
   height: 40px;
-  width: 600px;
   border-radius: 5%;
-  margin-bottom: 20px;
+  margin: 0 auto 20px auto;
 }
+
 
 #cinema-container {
   display: flex;
@@ -128,4 +130,18 @@ h1 {
 
 #result {
   margin-top: 20px;
+}
+.booking-container {
+  display: flex;
+  flex-direction: column;      /* stack vertically */
+  align-items: center;         /* center horizontally */
+  text-align: center;          /* center text inside h1/h4 */
+  margin-bottom: 20px;
+}
+
+.hour-buttons {
+  display: flex;               /* make buttons in a row */
+  justify-content: center;     /* center buttons horizontally */
+  gap: 10px;                   /* space between buttons */
+  flex-wrap: wrap;             /* wrap on smaller screens */
 }

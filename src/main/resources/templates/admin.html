@@ -10,8 +10,11 @@
 
     <aside class="sidebar">
         <div class="logo">
-            <img th:src="@{/assets/logo-w.png}" alt="" style="width: 180px;">
+            <a th:href="@{/index}">
+                <img th:src="@{/assets/logo-w.png}" alt="" style="width: 180px;">
+            </a>
         </div>
+
         <nav>
             <ul>
                 <li class="active" onclick="openTab('dashboard')">Dashboard</li>
