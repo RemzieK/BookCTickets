@@ -9,6 +9,9 @@
     <title>Book Seats</title>
 </head>
 <body>
+<a th:href="@{/index}" class="logo">
+    <img th:src="@{/assets/logo-w.png}" alt="" style="width: 180px;">
+</a>
 
 <div id="booking-root"
      th:data-movie-id="${movie.id}"
@@ -17,7 +20,7 @@
     <div class="booking-container">
         <h1 th:text="'Select seats for ' + ${movie.title}">Select the seats</h1>
 
-        <h4>Select Time:</h4>
+        <h2>Select Time:</h2>
         <div class="mb-3 hour-buttons">
             <button th:each="h : ${hours}" type="button" class="btn hour-btn"
                     th:text="${h}" th:data-hour="${h}"></button>
@@ -56,14 +59,33 @@
             </div>
         </div>
 
-        <div id="paymentSection" style="display:none;">
-            <h4>Payment Information</h4>
-            <input type="text" name="cardName" placeholder="Name on Card" required>
-            <input type="text" name="cardNumber" placeholder="Card Number" required>
-            <input type="text" name="expiry" placeholder="MM/YY" required>
-            <input type="text" name="cvc" placeholder="CVC" required>
-            <button id="buy-btn" type="button">Pay Now</button>
+        <!-- Reservation Info Modal -->
+        <div id="reservationModal" class="payment-modal">
+            <div class="payment-modal-content">
+                <span id="closeReservationModal" class="close-btn">&times;</span>
+                <h2>Seats temporary reserved!</h2>
+                <p>Complete payment within 10 minutes.</p>
+                <button id="goToPaymentBtn" class="pay-btn">Buy tickets</button>
+            </div>
         </div>
+
+
+        <!-- Payment Modal -->
+        <div id="paymentModal" class="payment-modal">
+            <div class="payment-modal-content">
+                <span id="closeModal" class="close-btn">&times;</span>
+
+                <h2>Payment Information</h2>
+
+                <input type="text" name="cardName" placeholder="Name on Card" required>
+                <input type="text" name="cardNumber" placeholder="Card Number" required>
+                <input type="text" name="expiry" placeholder="MM/YY" required>
+                <input type="text" name="cvc" placeholder="CVC" required>
+
+                <button id="buy-btn" type="button" class="pay-btn">Pay Now</button>
+            </div>
+        </div>
+
     </div>
 </div>
 
