@@ -1,6 +1,5 @@
 package com.example.BookCTickets.Authentication;
 
-import com.example.BookCTickets.model.Role;
 import com.example.BookCTickets.model.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

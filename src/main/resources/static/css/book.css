@@ -13,7 +13,6 @@ body {
   margin-top: 15px;
 }
 
-
 h1 {
   display: flex;
   flex-direction: row;
@@ -24,7 +23,7 @@ h1 {
 
 .screen {
   max-width: 600px;
-  width: 80%;               /* takes 80% of parent width */
+  width: 80%;
   text-align: center;
   font-size: 24px;
   color: #fff;
@@ -33,7 +32,6 @@ h1 {
   border-radius: 5%;
   margin: 0 auto 20px auto;
 }
-
 
 #cinema-container {
   display: flex;
@@ -134,19 +132,19 @@ h1 {
 }
 .booking-container {
   display: flex;
-  flex-direction: column;      /* stack vertically */
-  align-items: center;         /* center horizontally */
-  text-align: center;          /* center text inside h1/h4 */
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   margin-bottom: 20px;
 }
 
 .hour-buttons {
-  display: flex;               /* make buttons in a row */
-  justify-content: center;     /* center buttons horizontally */
-  gap: 10px;                   /* space between buttons */
-  flex-wrap: wrap;             /* wrap on smaller screens */
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
-/* Hour buttons styled like trending-filter */
+
 .hour-btn {
     display: inline-block;
     text-align: center;
@@ -162,12 +160,10 @@ h1 {
     transition: all .3s ease;
 }
 
-/* Hover effect */
 .hour-btn:hover {
     color: #2b99b1;
 }
 
-/* ACTIVE hour (selected) */
 .hour-btn.active-hour {
     background-color: #2b99b1;
     color: #fff;
@@ -176,9 +172,9 @@ h1 {
 .hour-btn.active-hour:hover {
     color: #fff;
 }
-/* --- PAYMENT MODAL OVERLAY --- */
+
 .payment-modal {
-  display: none; /* hidden by default */
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -191,7 +187,6 @@ h1 {
   z-index: 999;
 }
 
-/* --- MODAL BOX --- */
 .payment-modal-content {
   background: #ffffff;
   width: 350px;
@@ -209,13 +204,11 @@ h1 {
 
 }
 
-/* --- Animation --- */
 @keyframes popIn {
   0% { transform: scale(0.8); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* --- Close Button --- */
 .close-btn {
   position: absolute;
   top: 15px;
@@ -230,7 +223,6 @@ h1 {
   color: #833AB4;
 }
 
-/* --- Input fields --- */
 .payment-modal-content input {
   width: 100%;
   padding: 12px 15px;
@@ -248,7 +240,6 @@ h1 {
   border-color: #2b99b1;
 }
 
-/* --- Pay Button (matches hour buttons) --- */
 .pay-btn {
   width: 100%;
   background-color: #2b99b1;
@@ -271,7 +262,7 @@ h1 {
   background-color: #2b99b1;
   color: #fff;
 }
-/* Position the logo at the top-left */
+
 .logo {
     position: absolute;
     top: 20px;
@@ -279,12 +270,30 @@ h1 {
     display: block;
     z-index: 1000;
 }
-/* Reduce spacing in reservation modal */
+
 #reservationModal .payment-modal-content h2 {
-    margin-bottom: 5px; /* default might be 20px, reduce to 5px */
+    margin-bottom: 5px;
 }
 
 #reservationModal .payment-modal-content p {
     margin-top: 0;
-    font-size: 16px; /* optional: adjust font size */
+    font-size: 16px;
+}
+.logo-img {
+    width: 180px;
+}
+
+.reserve-btn {
+    display: none;
+    background-color: #2b99b1;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.reserve-btn:hover {
+    background-color: #2980b9;
 }

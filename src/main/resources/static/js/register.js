@@ -2,7 +2,7 @@ function togglePassword(inputId, btn) {
     const input = document.getElementById(inputId);
     if (input.type === "password") {
         input.type = "text";
-        btn.textContent = "🙈";
+        btn.textContent = "🔒";
     } else {
         input.type = "password";
         btn.textContent = "👁️";
@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Submit to backend (adjust URL as needed)
         try {
             const response = await fetch("http://localhost:8080/users", {
                 method: "POST",

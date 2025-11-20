@@ -11,24 +11,24 @@ function openTab(tabName) {
     document.querySelectorAll('.sidebar nav ul li').forEach(li => li.classList.remove('active'));
     document.querySelector(`.sidebar nav ul li[onclick="openTab('${tabName}')"]`).classList.add('active');
 }
-
-function openInfoModal(id, title, description, director, actors, genre, duration, ticketPrice, hours, room, language, ageRestriction, imageUrl) {
+function openInfoModal(data) {
     const modal = document.getElementById('infoMovieModal');
-    modal.querySelector('#info-title').value = title;
-    modal.querySelector('#info-description').value = description;
-    modal.querySelector('#info-director').value = director;
-    modal.querySelector('#info-actors').value = actors;
-    modal.querySelector('#info-genre').value = genre;
-    modal.querySelector('#info-duration').value = duration;
-    modal.querySelector('#info-ticketPrice').value = ticketPrice;
-    modal.querySelector('#info-hours').value = hours;
-    modal.querySelector('#info-room').value = room;
-    modal.querySelector('#info-language').value = language;
-    modal.querySelector('#info-ageRestriction').value = ageRestriction;
+
+    modal.querySelector('#info-title').value = data.title;
+    modal.querySelector('#info-description').value = data.description;
+    modal.querySelector('#info-director').value = data.director;
+    modal.querySelector('#info-actors').value = data.actors;
+    modal.querySelector('#info-genre').value = data.genre;
+    modal.querySelector('#info-duration').value = data.duration;
+    modal.querySelector('#info-ticketPrice').value = data.ticketPrice;
+    modal.querySelector('#info-hours').value = data.hours;
+    modal.querySelector('#info-room').value = data.room;
+    modal.querySelector('#info-language').value = data.language;
+    modal.querySelector('#info-ageRestriction').value = data.ageRestriction;
 
     const img = modal.querySelector('#info-image');
-    if(imageUrl){
-        img.src = imageUrl;
+    if(data.imageUrl){
+        img.src = data.imageUrl;
         img.style.display = 'block';
     } else {
         img.style.display = 'none';
@@ -37,27 +37,26 @@ function openInfoModal(id, title, description, director, actors, genre, duration
     modal.style.display = 'block';
 }
 
-
-function openEditModal(id, title, description, director, actors, genre, duration, ticketPrice, hours, room, language, ageRestriction, imageUrl) {
+function openEditModal(data) {
     const modal = document.getElementById('editMovieModal');
 
-    modal.querySelector('#edit-id').value = id;
-    modal.querySelector('#edit-title').value = title;
-    modal.querySelector('#edit-description').value = description;
-    modal.querySelector('#edit-director').value = director;
-    modal.querySelector('#edit-actors').value = actors;
-    modal.querySelector('#edit-genre').value = genre;
-    modal.querySelector('#edit-duration').value = duration;
-    modal.querySelector('#edit-ticketPrice').value = ticketPrice;
-    modal.querySelector('#edit-hours').value = hours;
-    modal.querySelector('#edit-room').value = room;
-    modal.querySelector('#edit-language').value = language;
-    modal.querySelector('#edit-ageRestriction').value = ageRestriction;
-    modal.querySelector('#edit-existingImageUrl').value = imageUrl;
+    modal.querySelector('#edit-id').value = data.id;
+    modal.querySelector('#edit-title').value = data.title;
+    modal.querySelector('#edit-description').value = data.description;
+    modal.querySelector('#edit-director').value = data.director;
+    modal.querySelector('#edit-actors').value = data.actors;
+    modal.querySelector('#edit-genre').value = data.genre;
+    modal.querySelector('#edit-duration').value = data.duration;
+    modal.querySelector('#edit-ticketPrice').value = data.ticketPrice;
+    modal.querySelector('#edit-hours').value = data.hours;
+    modal.querySelector('#edit-room').value = data.room;
+    modal.querySelector('#edit-language').value = data.language;
+    modal.querySelector('#edit-ageRestriction').value = data.ageRestriction;
+    modal.querySelector('#edit-existingImageUrl').value = data.imageUrl;
 
     const img = modal.querySelector('#edit-image-preview');
-    if(imageUrl){
-        img.src = imageUrl;
+    if(data.imageUrl){
+        img.src = data.imageUrl;
         img.style.display = 'block';
     } else {
         img.style.display = 'none';
@@ -65,50 +64,19 @@ function openEditModal(id, title, description, director, actors, genre, duration
 
     modal.style.display = 'block';
 }
-
-
 function previewEditImage(event){
     const img = document.getElementById('edit-image-preview');
     img.src = URL.createObjectURL(event.target.files[0]);
     img.style.display = 'block';
 }
-
 function showInfo(button) {
     const row = button.closest('tr');
-    openInfoModal(
-        row.dataset.id,
-        row.dataset.title,
-        row.dataset.description,
-        row.dataset.director,
-        row.dataset.actors,
-        row.dataset.genre,
-        row.dataset.duration,
-        row.dataset.ticketPrice,
-        row.dataset.hours,
-        row.dataset.room,
-        row.dataset.language,
-        row.dataset.ageRestriction,
-        row.dataset.imageUrl
-    );
+    openInfoModal(row.dataset);
 }
 
 function showEdit(button) {
     const row = button.closest('tr');
-    openEditModal(
-        row.dataset.id,
-        row.dataset.title,
-        row.dataset.description,
-        row.dataset.director,
-        row.dataset.actors,
-        row.dataset.genre,
-        row.dataset.duration,
-        row.dataset.ticketPrice,
-        row.dataset.hours,
-        row.dataset.room,
-        row.dataset.language,
-        row.dataset.ageRestriction,
-        row.dataset.imageUrl
-    );
+    openEditModal(row.dataset);
 }
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -117,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
         openTab(tab);
     }
 });
-// Client-side file size check (e.g., 10MB limit)
 document.addEventListener("DOMContentLoaded", () => {
     const MAX_SIZE_MB = 10;
     const fileInputs = document.querySelectorAll('input[type="file"][name="imageFile"]');
@@ -126,17 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
         input.addEventListener('change', event => {
             const file = event.target.files[0];
             if (file && file.size > MAX_SIZE_MB * 1024 * 1024) {
-                // Show a nice styled warning message
                 showUploadError(`File too large! Please select an image smaller than ${MAX_SIZE_MB} MB.`);
-                event.target.value = ""; // reset the file input
+                event.target.value = "";
             }
         });
     });
 });
 
-// Display a popup-style error message at the top
 function showUploadError(message) {
-    // Remove old message if any
     const oldMsg = document.getElementById('upload-error-msg');
     if (oldMsg) oldMsg.remove();
 
@@ -157,7 +121,6 @@ function showUploadError(message) {
     msg.style.transition = 'opacity 0.3s ease';
     document.body.appendChild(msg);
 
-    // Auto-remove after 4 seconds
     setTimeout(() => {
         msg.style.opacity = '0';
         setTimeout(() => msg.remove(), 300);

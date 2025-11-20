@@ -2,6 +2,7 @@
 body, html {
     height: 100%;
 }
+
 .admin-container {
     display: flex;
     height: 100vh;
@@ -238,3 +239,45 @@ table tr:hover {
     margin-top: 15px;
 }
 
+.img-thumbnail {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.modal-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    display: none;
+}
+
+.edit-image-preview {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    display: none;
+}
+
+.logo img {
+    width: 180px;
+}
+
+.upload-error-msg {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(to right, #b00020, #ff4d4d);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 2000;
+    transition: opacity 0.3s ease;
+}

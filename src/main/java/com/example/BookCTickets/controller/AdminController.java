@@ -42,17 +42,14 @@ public class AdminController {
 
         Movie movie;
 
-        // EDIT MODE → load existing movie
         if (formMovie.getId() != null) {
             movie = movieService.findById(formMovie.getId());
-            if (movie == null) return "redirect:/admin?tab=movies"; // safety
+            if (movie == null) return "redirect:/admin?tab=movies";
         }
-        // ADD MODE → create new movie
         else {
             movie = new Movie();
         }
 
-        // Update editable fields
         movie.setTitle(formMovie.getTitle());
         movie.setDescription(formMovie.getDescription());
         movie.setDirector(formMovie.getDirector());
@@ -65,7 +62,6 @@ public class AdminController {
         movie.setLanguage(formMovie.getLanguage());
         movie.setAgeRestriction(formMovie.getAgeRestriction());
 
-        // Handle image
         if (imageFile != null && !imageFile.isEmpty()) {
             String originalFilename = Paths.get(imageFile.getOriginalFilename()).getFileName().toString();
             String filename = System.currentTimeMillis() + "_" + originalFilename;
@@ -83,9 +79,7 @@ public class AdminController {
             movie.setImageUrl(existingImageUrl);
         }
 
-        // SAVE WITHOUT LOSING RELATIONSHIPS
         movieService.save(movie);
-
         return "redirect:/admin?tab=movies";
     }
 

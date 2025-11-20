@@ -77,7 +77,6 @@ public class ReservationRestController {
         if (movie == null) return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Map.of("message", "Movie not found"));
 
-        // Validate payment data
         if (payment.cardName() == null || payment.cardNumber() == null
                 || payment.expiry() == null || payment.cvc() == null
                 || payment.cardName().isBlank() || payment.cardNumber().isBlank()
@@ -90,7 +89,6 @@ public class ReservationRestController {
         }
 
         try {
-            // Process payment and mark seats as paid
             paymentService.processPaymentWithSeats(user, movie, hour, payment.seats(),
                     payment.cardName(), payment.cardNumber(), payment.expiry(), payment.cvc());
 

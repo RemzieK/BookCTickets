@@ -39,7 +39,6 @@ public class UserService {
 
     @Transactional
     public User save(User user) {
-        // 🧠 Basic backend validation (safety even if JS is disabled)
         if (usernameExists(user.getUsername())) {
             throw new IllegalArgumentException("Username already taken.");
         }

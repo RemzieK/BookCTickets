@@ -35,7 +35,6 @@ public class TicketBookController {
         }
         model.addAttribute("movie", movie);
 
-        // Parse hours from comma-separated string
         List<String> hours = Arrays.stream(movie.getHours().split(","))
                 .map(String::trim)
                 .filter(h -> !h.isEmpty())

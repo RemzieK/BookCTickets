@@ -9,8 +9,9 @@
     <title>Book Seats</title>
 </head>
 <body>
+
 <a th:href="@{/index}" class="logo">
-    <img th:src="@{/assets/logo-w.png}" alt="" style="width: 180px;">
+    <img th:src="@{/assets/logo-w.png}" alt="" class="logo-img">
 </a>
 
 <div id="booking-root"
@@ -21,8 +22,8 @@
         <h1 th:text="'Select seats for ' + ${movie.title}">Select the seats</h1>
 
         <h2>Select Time:</h2>
-        <div class="mb-3 hour-buttons">
-            <button th:each="h : ${hours}" type="button" class="btn hour-btn"
+        <div class="hour-buttons">
+            <button th:each="h : ${hours}" type="button" class="hour-btn"
                     th:text="${h}" th:data-hour="${h}"></button>
         </div>
 
@@ -47,19 +48,16 @@
             </div>
         </div>
 
-        <div class="screen">
-            <span>SCREEN</span>
-        </div>
+        <div class="screen"><span>SCREEN</span></div>
 
         <div class="container">
-            <button id="reserve-btn" type="button" style="display:none;">Reserve Seats</button>
+            <button id="reserve-btn" class="reserve-btn">Reserve Seats</button>
             <div id="result">
                 <p id="selected-seats"></p>
                 <p id="total-price"></p>
             </div>
         </div>
 
-        <!-- Reservation Info Modal -->
         <div id="reservationModal" class="payment-modal">
             <div class="payment-modal-content">
                 <span id="closeReservationModal" class="close-btn">&times;</span>
@@ -69,14 +67,11 @@
             </div>
         </div>
 
-
-        <!-- Payment Modal -->
         <div id="paymentModal" class="payment-modal">
             <div class="payment-modal-content">
                 <span id="closeModal" class="close-btn">&times;</span>
 
                 <h2>Payment Information</h2>
-
                 <input type="text" name="cardName" placeholder="Name on Card" required>
                 <input type="text" name="cardNumber" placeholder="Card Number" required>
                 <input type="text" name="expiry" placeholder="MM/YY" required>
@@ -85,7 +80,6 @@
                 <button id="buy-btn" type="button" class="pay-btn">Pay Now</button>
             </div>
         </div>
-
     </div>
 </div>
 

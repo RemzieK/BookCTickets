@@ -21,9 +21,9 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
     ) throws IOException, ServletException {
 
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("Admin"))) {
-            response.sendRedirect("/admin"); // Admin goes to admin page
+            response.sendRedirect("/admin");
         } else {
-            response.sendRedirect("/movies"); // Regular user goes to movies
+            response.sendRedirect("/movies");
         }
     }
 }

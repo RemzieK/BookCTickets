@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/users") // 👈 Added consistent base path
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     private UserService userService;

@@ -628,23 +628,16 @@ img {
   font-size: 14px;
   text-transform: uppercase;
   font-weight: 500;
-
-  /* Smaller padding (top/bottom, left/right) */
   padding: 6px 18px;
-
-  /* Remove fixed height */
   height: auto;
   line-height: normal;
-
   border: none;
   border-radius: 20px;
   transition: all .3s;
-
-  /* Center under title */
   margin: 10px auto 0;
   display: block;
 }
-/* Shared button style (matches View Details) */
+
 .book-ticket-btn,
 .login-book-btn {
   display: inline-block;
@@ -659,22 +652,13 @@ img {
   color: #fff;
 }
 
-/* Pinkish button like "View Details" */
 .book-ticket-btn {
   background-color: #ee626b;
 }
 
-/* Yellow button */
 .login-book-btn {
   background-color: #ffa220;
 }
-
-
-/*
----------------------------------------------
-Banner Style
----------------------------------------------
-*/
 
 .main-banner {
   background-image: url(../assets/bg.jpg);
@@ -736,7 +720,7 @@ Banner Style
   outline: none;
   border-radius: 25px;
   background-color: #fff;
-  border: none;
+  border: 1px solid #ccc;
   padding: 0px 135px 0px 25px;
   font-size: 14px;
   color: #7a7a7a;
@@ -802,12 +786,6 @@ Banner Style
   line-height: 100px;
 }
 
-/*
----------------------------------------------
-Services Style
----------------------------------------------
-*/
-
 .features {
   margin-top: -80px;
 }
@@ -840,12 +818,6 @@ Services Style
 .features .item:hover .image {
   background-color: #ffa220;
 }
-
-/*
----------------------------------------------
-Trending Style
----------------------------------------------
-*/
 
 .trending .main-button {
   margin-top: 32px;
@@ -928,12 +900,6 @@ Trending Style
   background-color: #ffa220;
 }
 
-/*
----------------------------------------------
-Footer Style
----------------------------------------------
-*/
-
 footer {
   margin-top: 150px;
   background-color: #0071f8;
@@ -963,12 +929,6 @@ footer p a:hover {
   opacity: 0.75;
 }
 
-/*
----------------------------------------------
-Page Header Style
----------------------------------------------
-*/
-
 .page-heading {
   background-image: url(../assets/heading.jpg);
   border-radius: 0px 0px 150px 150px;
@@ -997,12 +957,6 @@ Page Header Style
   position: relative;
   margin-bottom: 20px;
 }
-
-/*
----------------------------------------------
-Shop Page Style
----------------------------------------------
-*/
 
 .trending ul.trending-filter {
   list-style: none;
@@ -1149,12 +1103,6 @@ Shop Page Style
   color: #fff;
 }
 
-/*
----------------------------------------------
-Contact PAge Style
----------------------------------------------
-*/
-
 .contact-page .left-text {
   background-color: #f7f7f7;
   border-radius: 25px;
@@ -1240,12 +1188,6 @@ Contact PAge Style
   background-color: #0071f8;
 }
 
-/*
----------------------------------------------
-Responsive Style
----------------------------------------------
-*/
-
 body {
   overflow-x: hidden;
 }
@@ -1316,8 +1258,6 @@ body {
     border-radius: 5px;
 }
 
-
-/* Dropdown container and spacing */
 .header-area .main-nav .nav .dropdown-menu {
   padding: 6px 8px;
   min-width: 200px;
@@ -1328,7 +1268,6 @@ body {
   box-shadow: 0 20px 30px rgba(0, 0, 0, 0.12);
 }
 
-/* Neutralize global li sizing inside dropdown */
 .header-area .main-nav .nav .dropdown-menu li {
   height: auto;
   line-height: normal;
@@ -1336,7 +1275,6 @@ body {
   margin: 0;
 }
 
-/* Profile entry as plain text link */
 .header-area .main-nav .nav .dropdown-menu li:first-child > a.dropdown-item {
   padding: 0;
   background: transparent !important;
@@ -1352,12 +1290,10 @@ body {
   text-decoration: underline;
 }
 
-/* Divider spacing */
 .header-area .main-nav .nav .dropdown-menu .dropdown-divider {
   margin: 4px 0;
 }
 
-/* Centered logout pill */
 .header-area .main-nav .nav .dropdown-menu li:last-child {
   display: flex;
   justify-content: center;
@@ -1385,7 +1321,6 @@ body {
   box-shadow: 0 6px 18px rgba(238, 98, 107, 0.35);
 }
 
-/* Mobile adjustments */
 @media (max-width: 767px) {
   .header-area .main-nav .nav .dropdown-menu {
     padding: 6px 10px !important;
@@ -1403,7 +1338,7 @@ body {
     color: #fff !important;
   }
 }
-/* Toggle: center username and caret inside pill */
+
 .header-area .main-nav .nav .dropdown > a.nav-link {
   display: flex;
   align-items: center;

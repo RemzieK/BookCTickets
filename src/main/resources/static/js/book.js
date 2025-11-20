@@ -14,16 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     buildSeatGrid();
     setupHourButtons();
 
-    // Auto-select first hour
     setTimeout(() => document.querySelector('.hour-btn')?.click(), 100);
 
     setupPaymentModalControls();
     setupPaymentInputEnhancements();
 });
 
-/* --------------------------------------------
-   BUILD SEAT GRID
---------------------------------------------- */
 function buildSeatGrid() {
     const seatGroups = [
         { selector: '.side-seats:first-child table', columns: sideColumns },
@@ -84,9 +80,6 @@ function buildSeatGrid() {
     });
 }
 
-/* --------------------------------------------
-   SEAT SELECTION
---------------------------------------------- */
 function handleSeatClick(button) {
     if (!selectedHour) {
         alert('Please select a time first.');
@@ -116,9 +109,6 @@ function updateSelectionSummary() {
         selected.length ? 'inline-block' : 'none';
 }
 
-/* --------------------------------------------
-   HOUR BUTTONS
---------------------------------------------- */
 function setupHourButtons() {
     const buttons = document.querySelectorAll('.hour-btn');
 
@@ -135,9 +125,6 @@ function setupHourButtons() {
     });
 }
 
-/* --------------------------------------------
-   LOAD OCCUPIED SEATS
---------------------------------------------- */
 async function loadOccupiedSeats() {
     if (!selectedHour) return;
 
@@ -167,9 +154,6 @@ function markAsOccupied(id) {
     btn.disabled = true;
 }
 
-/* --------------------------------------------
-   CLEAR SELECTIONS
---------------------------------------------- */
 function clearAllSelections() {
     document.querySelectorAll('.seat-btn').forEach(btn => {
         if (!btn.classList.contains('occupied')) {
@@ -187,9 +171,6 @@ function clearAllSelections() {
     document.getElementById('paymentModal').style.display = 'none';
 }
 
-/* --------------------------------------------
-   RESERVE SEATS
---------------------------------------------- */
 document.getElementById('reserve-btn').addEventListener('click', async () => {
     const selected = Array.from(document.querySelectorAll('.seat-btn.selected'))
         .map(b => b.dataset.seat);
@@ -209,27 +190,21 @@ document.getElementById('reserve-btn').addEventListener('click', async () => {
 
         reservedSeats = selected;
 
-        // Hide reserve button
         document.getElementById('reserve-btn').style.display = 'none';
 
-        // Mark seats as occupied
         selected.forEach(id => markAsOccupied(id));
 
-        // Show the reservation info modal
         const resModal = document.getElementById('reservationModal');
         resModal.style.display = 'flex';
 
-        // Close button
         document.getElementById('closeReservationModal').addEventListener('click', () => {
             resModal.style.display = 'none';
         });
 
-        // Clicking outside the modal closes it
         window.addEventListener('click', e => {
             if (e.target === resModal) resModal.style.display = 'none';
         });
 
-        // Go to payment
         document.getElementById('goToPaymentBtn').addEventListener('click', () => {
             resModal.style.display = 'none';
             document.getElementById('paymentModal').style.display = 'flex';
@@ -240,9 +215,6 @@ document.getElementById('reserve-btn').addEventListener('click', async () => {
     }
 });
 
-/* --------------------------------------------
-   PAYMENT PROCESS WITH VALIDATION
---------------------------------------------- */
 document.getElementById('buy-btn').addEventListener('click', async () => {
     const cardName = document.querySelector('[name="cardName"]').value.trim();
     const cardNumber = document.querySelector('[name="cardNumber"]').value.replace(/\s/g, '');
@@ -252,11 +224,9 @@ document.getElementById('buy-btn').addEventListener('click', async () => {
     if (!cardName || !cardNumber || !expiry || !cvc)
         return alert('Fill out all fields.');
 
-    // Card number validation: 16 digits
     if (!/^\d{16}$/.test(cardNumber))
         return alert('Card number must be exactly 16 digits.');
 
-    // Expiry validation: MM/YY
     if (!/^\d{2}\/\d{2}$/.test(expiry))
         return alert('Expiry must be in MM/YY format.');
 
@@ -267,7 +237,6 @@ document.getElementById('buy-btn').addEventListener('click', async () => {
     if (month < 1 || month > 12)
         return alert('Invalid expiry month.');
 
-    // Convert YY to full year
     const currentFullYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth() + 1;
     year += (year < 100 ? Math.floor(currentFullYear / 100) * 100 : 0);
@@ -275,7 +244,6 @@ document.getElementById('buy-btn').addEventListener('click', async () => {
     if (year < currentFullYear || (year === currentFullYear && month < currentMonth))
         return alert('Card has expired.');
 
-    // CVC: 3 or 4 digits
     if (!/^\d{3,4}$/.test(cvc))
         return alert('Invalid CVC.');
 
@@ -301,9 +269,6 @@ document.getElementById('buy-btn').addEventListener('click', async () => {
     }
 });
 
-/* --------------------------------------------
-   MODAL CONTROLS
---------------------------------------------- */
 function setupPaymentModalControls() {
     const modal = document.getElementById('paymentModal');
     const closeBtn = document.getElementById('closeModal');
@@ -315,22 +280,15 @@ function setupPaymentModalControls() {
     });
 }
 
-/* --------------------------------------------
-   ESC KEY
---------------------------------------------- */
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') clearAllSelections();
 });
 
-/* --------------------------------------------
-   ADVANCED PAYMENT INPUT ENHANCEMENTS
---------------------------------------------- */
 function setupPaymentInputEnhancements() {
     const cardInput = document.querySelector('[name="cardNumber"]');
     const expiryInput = document.querySelector('[name="expiry"]');
     const cvcInput = document.querySelector('[name="cvc"]');
 
-    // Card number auto-format
     cardInput.addEventListener('input', () => {
         let value = cardInput.value.replace(/\D/g, '').slice(0, 16);
         value = value.replace(/(.{4})/g, '$1 ').trim();
@@ -338,23 +296,17 @@ function setupPaymentInputEnhancements() {
         detectCardType(value.replace(/\s/g, ''));
     });
 
-    // Expiry auto-format MM/YY
     expiryInput.addEventListener('input', () => {
         let v = expiryInput.value.replace(/\D/g, '').slice(0, 4);
         if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2, 4);
         expiryInput.value = v;
     });
 
-    // CVC input
     cvcInput.addEventListener('input', () => {
         cvcInput.value = cvcInput.value.replace(/\D/g, '').slice(0, 4);
     });
 }
 
-
-/* --------------------------------------------
-   SUCCESS CHECKMARK ANIMATION
---------------------------------------------- */
 function showSuccessAnimation() {
     const modal = document.getElementById('paymentModal');
 
@@ -375,3 +327,4 @@ function showSuccessAnimation() {
         modal.style.display = "none";
     }, 2000);
 }
+
