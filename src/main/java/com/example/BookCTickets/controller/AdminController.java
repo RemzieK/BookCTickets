@@ -36,10 +36,36 @@ public class AdminController {
     }
 
     @PostMapping("/movies/save")
-    public String saveMovie(@ModelAttribute Movie movie,
+    public String saveMovie(@ModelAttribute Movie formMovie,
                             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                             @RequestParam(value = "existingImageUrl", required = false) String existingImageUrl) throws IOException {
 
+        Movie movie;
+
+        // EDIT MODE → load existing movie
+        if (formMovie.getId() != null) {
+            movie = movieService.findById(formMovie.getId());
+            if (movie == null) return "redirect:/admin?tab=movies"; // safety
+        }
+        // ADD MODE → create new movie
+        else {
+            movie = new Movie();
+        }
+
+        // Update editable fields
+        movie.setTitle(formMovie.getTitle());
+        movie.setDescription(formMovie.getDescription());
+        movie.setDirector(formMovie.getDirector());
+        movie.setActors(formMovie.getActors());
+        movie.setGenre(formMovie.getGenre());
+        movie.setDuration(formMovie.getDuration());
+        movie.setTicketPrice(formMovie.getTicketPrice());
+        movie.setHours(formMovie.getHours());
+        movie.setRoom(formMovie.getRoom());
+        movie.setLanguage(formMovie.getLanguage());
+        movie.setAgeRestriction(formMovie.getAgeRestriction());
+
+        // Handle image
         if (imageFile != null && !imageFile.isEmpty()) {
             String originalFilename = Paths.get(imageFile.getOriginalFilename()).getFileName().toString();
             String filename = System.currentTimeMillis() + "_" + originalFilename;
@@ -57,9 +83,12 @@ public class AdminController {
             movie.setImageUrl(existingImageUrl);
         }
 
+        // SAVE WITHOUT LOSING RELATIONSHIPS
         movieService.save(movie);
+
         return "redirect:/admin?tab=movies";
     }
+
 
     @GetMapping("/movies/delete/{id}")
     public String deleteMovie(@PathVariable Long id){

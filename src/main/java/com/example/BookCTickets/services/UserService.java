@@ -22,7 +22,7 @@ public class UserService {
     private final TicketRepository ticketRepository;
 
     public List<User> findAll() {
-        return userRepository.findAll();
+        return userRepository.findAllByOrderByIdDesc();
     }
 
     public Optional<User> findById(Long id) {

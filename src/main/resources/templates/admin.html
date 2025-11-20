@@ -20,9 +20,18 @@
                 <li class="active" onclick="openTab('dashboard')">Dashboard</li>
                 <li onclick="openTab('users')">Users</li>
                 <li onclick="openTab('movies')">Movies</li>
+                <!-- Logout Button -->
+                <li>
+                    <form th:action="@{/logout}" method="post" style="margin: 0;">
+                        <button type="submit" class="dropdown-item">Logout</button>
+
+                        </button>
+                    </form>
+                </li>
             </ul>
         </nav>
     </aside>
+
 
     <main class="main-content">
 
@@ -85,7 +94,7 @@
                         <th>Title</th>
                         <th>Genre</th>
                         <th>Price</th>
-                        <th>Thumbnail</th>
+                        <th>Poster</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -94,8 +103,10 @@
                         th:data-id="${movie.id}"
                         th:data-title="${movie.title}"
                         th:data-description="${movie.description}"
+                        th:data-director="${movie.director}"
                         th:data-actors="${movie.actors}"
                         th:data-genre="${movie.genre}"
+                        th:data-duration="${movie.duration}"
                         th:data-ticket-price="${movie.ticketPrice}"
                         th:data-hours="${movie.hours}"
                         th:data-room="${movie.room}"
@@ -103,7 +114,8 @@
                         th:data-age-restriction="${movie.ageRestriction}"
                         th:data-image-url="${movie.imageUrl}">
 
-                        <td th:text="${movie.id}"></td>
+
+                    <td th:text="${movie.id}"></td>
                         <td th:text="${movie.title}"></td>
                         <td th:text="${movie.genre}"></td>
                         <td th:text="${movie.ticketPrice}"></td>
@@ -133,7 +145,8 @@
         <form th:action="@{/admin/movies/save}" method="post" enctype="multipart/form-data">
             <input type="text" name="title" placeholder="Title" required>
             <textarea name="description" placeholder="Description" required></textarea>
-            <input type="text" name="actors" placeholder="Actors" required>
+            <input name = "director" placeholder="Director" required>
+            <textarea type="text" name="actors" placeholder="Actors" required></textarea>
             <select name="genre" required>
                 <option value="">Select Genre</option>
                 <option>Action</option>
@@ -146,6 +159,7 @@
                 <option>Horror</option>
                 <option>Romance</option>
             </select>
+            <input type="number" name="duration" placeholder="Duration" required>
             <input type="number" name="ticketPrice" placeholder="Ticket Price" step="0.01" required>
             <input type="text" name="hours" placeholder="Show Hours (e.g., 10:00,14:00)" required>
             <input type="text" name="room" placeholder="Cinema Room" required>
@@ -165,8 +179,10 @@
         <div class="movie-info-fields">
             <label>Title</label><input type="text" id="info-title" readonly>
             <label>Description</label><textarea id="info-description" readonly></textarea>
-            <label>Actors</label><input type="text" id="info-actors" readonly>
+            <label>Director</label><input type="text" id="info-director" readonly>
+            <label>Actors</label><textarea type="text" id="info-actors" readonly></textarea>
             <label>Genre</label><input type="text" id="info-genre" readonly>
+            <label>Duration</label><input type="number" id="info-duration" readonly>
             <label>Ticket Price</label><input type="number" id="info-ticketPrice" readonly>
             <label>Hours</label><input type="text" id="info-hours" readonly>
             <label>Room</label><input type="text" id="info-room" readonly>
@@ -188,7 +204,8 @@
 
             <label>Title</label><input type="text" name="title" id="edit-title" required>
             <label>Description</label><textarea name="description" id="edit-description" required></textarea>
-            <label>Actors</label><input type="text" name="actors" id="edit-actors" required>
+            <label>Director</label><input name="director" id="edit-director" required>
+            <label>Actors</label><textarea type="text" name="actors" id="edit-actors" required></textarea>
             <label>Genre</label>
             <select name="genre" id="edit-genre" required>
                 <option value="">Select Genre</option>
@@ -202,6 +219,7 @@
                 <option>Horror</option>
                 <option>Romance</option>
             </select>
+            <label>Duration</label><input type="number" name="duration" id="edit-duration" required>
             <label>Ticket Price</label><input type="number" name="ticketPrice" id="edit-ticketPrice" step="0.01" required>
             <label>Hours</label><input type="text" name="hours" id="edit-hours" required>
             <label>Room</label><input type="text" name="room" id="edit-room" required>

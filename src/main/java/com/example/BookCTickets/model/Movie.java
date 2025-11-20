@@ -21,8 +21,10 @@ public class Movie {
     private String title;
     @Column(length = 1000)
     private String description;
+    private String director;
     private String actors;
     private String genre;
+    private String duration;
     private Double ticketPrice;
     private String hours;
     private String room;
@@ -30,9 +32,9 @@ public class Movie {
     private String ageRestriction;
     private String imageUrl;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE)
     private List<Payment> payments;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE)
     private List<Ticket> tickets;
 }

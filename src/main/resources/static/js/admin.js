@@ -12,12 +12,14 @@ function openTab(tabName) {
     document.querySelector(`.sidebar nav ul li[onclick="openTab('${tabName}')"]`).classList.add('active');
 }
 
-function openInfoModal(id, title, description, actors, genre, ticketPrice, hours, room, language, ageRestriction, imageUrl) {
+function openInfoModal(id, title, description, director, actors, genre, duration, ticketPrice, hours, room, language, ageRestriction, imageUrl) {
     const modal = document.getElementById('infoMovieModal');
     modal.querySelector('#info-title').value = title;
     modal.querySelector('#info-description').value = description;
+    modal.querySelector('#info-director').value = director;
     modal.querySelector('#info-actors').value = actors;
     modal.querySelector('#info-genre').value = genre;
+    modal.querySelector('#info-duration').value = duration;
     modal.querySelector('#info-ticketPrice').value = ticketPrice;
     modal.querySelector('#info-hours').value = hours;
     modal.querySelector('#info-room').value = room;
@@ -28,33 +30,42 @@ function openInfoModal(id, title, description, actors, genre, ticketPrice, hours
     if(imageUrl){
         img.src = imageUrl;
         img.style.display = 'block';
-    } else img.style.display = 'none';
+    } else {
+        img.style.display = 'none';
+    }
 
     modal.style.display = 'block';
 }
 
-function openEditModal(id, title, description, actors, genre, ticketPrice, hours, room, language, ageRestriction, imageUrl) {
+
+function openEditModal(id, title, description, director, actors, genre, duration, ticketPrice, hours, room, language, ageRestriction, imageUrl) {
     const modal = document.getElementById('editMovieModal');
+
     modal.querySelector('#edit-id').value = id;
     modal.querySelector('#edit-title').value = title;
     modal.querySelector('#edit-description').value = description;
+    modal.querySelector('#edit-director').value = director;
     modal.querySelector('#edit-actors').value = actors;
     modal.querySelector('#edit-genre').value = genre;
+    modal.querySelector('#edit-duration').value = duration;
     modal.querySelector('#edit-ticketPrice').value = ticketPrice;
     modal.querySelector('#edit-hours').value = hours;
     modal.querySelector('#edit-room').value = room;
     modal.querySelector('#edit-language').value = language;
     modal.querySelector('#edit-ageRestriction').value = ageRestriction;
-     modal.querySelector('#edit-existingImageUrl').value = imageUrl;
+    modal.querySelector('#edit-existingImageUrl').value = imageUrl;
 
     const img = modal.querySelector('#edit-image-preview');
     if(imageUrl){
         img.src = imageUrl;
         img.style.display = 'block';
-    } else img.style.display = 'none';
+    } else {
+        img.style.display = 'none';
+    }
 
     modal.style.display = 'block';
 }
+
 
 function previewEditImage(event){
     const img = document.getElementById('edit-image-preview');
@@ -68,8 +79,10 @@ function showInfo(button) {
         row.dataset.id,
         row.dataset.title,
         row.dataset.description,
+        row.dataset.director,
         row.dataset.actors,
         row.dataset.genre,
+        row.dataset.duration,
         row.dataset.ticketPrice,
         row.dataset.hours,
         row.dataset.room,
@@ -85,8 +98,10 @@ function showEdit(button) {
         row.dataset.id,
         row.dataset.title,
         row.dataset.description,
+        row.dataset.director,
         row.dataset.actors,
         row.dataset.genre,
+        row.dataset.duration,
         row.dataset.ticketPrice,
         row.dataset.hours,
         row.dataset.room,

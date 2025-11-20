@@ -26,4 +26,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     long countByPaid(Boolean paid);
 
     void deleteByPaidFalseAndMovieIdAndHour(Long movieId, String hour);
+    void deleteAllByMovieIdAndHour(Long movieId, String hour);
+
 }

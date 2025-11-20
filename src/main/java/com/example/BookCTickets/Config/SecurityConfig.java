@@ -30,33 +30,21 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomLoginSuccessHandler successHandler) throws Exception {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        // Everything is public for now
                         .requestMatchers(
-                                "/",
-                                "/index",
-                                "/about",
-                                "/movies/**",
-                                "/admin/**",
-                                "/register",
-                                "/login",
-                                "/uploads/**",
-                                "/assets/**",
-                                "/css/**",
-                                "/js/**",
-                                "/vendor/**",
-                                "/images/**"
+                                "/", "/index", "/about", "/movies/**", "/register", "/login",
+                                "/uploads/**", "/assets/**", "/css/**", "/js/**", "/vendor/**", "/images/**"
                         ).permitAll()
-
+                        .requestMatchers("/admin/**").hasAuthority("Admin") // only Admin role can access
                         .requestMatchers("/book/**", "/reservation/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/movies", true)
+                        .successHandler(successHandler) // <-- use custom success handler
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -69,4 +57,6 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+
 }

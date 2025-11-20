@@ -78,4 +78,9 @@ public class TicketService {
     public long countTickets() {
         return ticketRepository.countByPaid(true);
     }
+
+    void deleteByMovieIdAndHour(Long movieId, String hour) {
+
+    }
+
 }
