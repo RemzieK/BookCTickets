@@ -637,6 +637,11 @@ img {
   margin: 10px auto 0;
   display: block;
 }
+.view-details:hover {
+    background-color: #ffa220; /* new hover color */
+    color: #fff; /* text color on hover */
+    cursor: pointer;
+}
 
 .book-ticket-btn,
 .login-book-btn {
@@ -659,7 +664,16 @@ img {
 .login-book-btn {
   background-color: #ffa220;
 }
+.book-ticket-btn:hover {
+    background-color: #ff8c00; /* new hover color */
+    color: #fff;
+}
 
+/* Login to Book Button */
+.login-book-btn:hover {
+    background-color: #ee626b;
+    color: #fff;
+}
 .main-banner {
   background-image: url(../assets/bg.jpg);
   border-radius: 0px 0px 150px 150px;

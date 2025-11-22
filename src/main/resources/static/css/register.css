@@ -123,9 +123,11 @@ body {
 .register-right p {
     line-height: 1.6;
 }
+
 .password-container {
      position: relative;
 }
+
 .toggle-password {
      position: absolute;
      right: 10px;
@@ -135,4 +137,8 @@ body {
      border: none;
      cursor: pointer;
      font-size: 1.1rem;
+}
+
+.error{
+color:white;
 }

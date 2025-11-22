@@ -12,9 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-
     private final CustomUserDetailsService userDetailsService;
-
     public SecurityConfig(CustomUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
@@ -38,13 +36,13 @@ public class SecurityConfig {
                                 "/", "/index", "/about", "/movies/**", "/register", "/login",
                                 "/uploads/**", "/assets/**", "/css/**", "/js/**", "/vendor/**", "/images/**"
                         ).permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("Admin") // only Admin role can access
+                        .requestMatchers("/admin/**").hasAuthority("Admin")
                         .requestMatchers("/book/**", "/reservation/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .successHandler(successHandler) // <-- use custom success handler
+                        .successHandler(successHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -54,9 +52,6 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 );
-
         return http.build();
     }
-
-
 }

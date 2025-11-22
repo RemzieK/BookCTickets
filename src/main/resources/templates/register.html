@@ -2,18 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Register - BookCTickets</title>
     <link rel="stylesheet" th:href="@{/css/register.css}" />
 </head>
 <body>
 <div class="register-container">
     <div class="register-card">
+
         <div class="register-left">
             <img th:src="@{/assets/logo.png}" alt="Logo" class="logo">
             <h2>Register</h2>
             <p>Please register to continue</p>
 
             <form th:action="@{/register}" method="post" th:object="${user}">
+
+
                 <input type="text" th:field="*{username}" placeholder="Username" required>
                 <input type="text" th:field="*{firstName}" placeholder="First Name" required>
                 <input type="text" th:field="*{lastName}" placeholder="Last Name" required>
@@ -24,23 +27,26 @@
                     <button type="button" class="toggle-password" onclick="togglePassword('registerPassword', this)">👁️</button>
                 </div>
 
+                <div th:if="${error}" class="error" th:text="${error}"></div>
+
                 <button type="submit" class="btn-register">REGISTER</button>
             </form>
 
             <div class="signup">
                 <span>Already have an account?</span>
-                <a href="/login" class="btn-create">LOG IN</a>
+                <a th:href="@{/login}" class="btn-create">LOG IN</a>
             </div>
         </div>
 
         <div class="register-right">
             <div class="right-content">
                 <h2>BookCTickets</h2>
-                <p>Create your free account to book your movie ticket right now with exclusive offers and instant access to the latest showtimes.</p>
+                <p>Create your free account to book your movie tickets instantly. Get exclusive offers and access the latest showtimes.</p>
             </div>
         </div>
+
     </div>
 </div>
-<script th:src="@{/js/register.js}"></script>
+<script th:src="@{/js/toggle.js}"></script>
 </body>
 </html>

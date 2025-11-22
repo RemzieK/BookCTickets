@@ -106,7 +106,6 @@
             </div>
         </div>
 
-        <!-- No results message -->
         <div id="no-results" class="text-center" style="display: none;">
             <h4>No movies found</h4>
             <p>Try selecting a different genre or search term.</p>
@@ -114,7 +113,6 @@
     </div>
 </div>
 
-<!-- Your modals here -->
 <div th:each="movie : ${movies}">
     <div class="modal fade" th:id="${'movieModal' + movie.id}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">

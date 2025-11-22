@@ -8,10 +8,8 @@ import com.example.BookCTickets.services.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +17,6 @@ import java.util.Map;
 @RequestMapping("/reservation")
 @RequiredArgsConstructor
 public class ReservationRestController {
-
     private final MovieService movieService;
     private final TicketService ticketService;
     private final PaymentService paymentService;
@@ -41,23 +38,18 @@ public class ReservationRestController {
             @PathVariable Long movieId,
             @RequestParam String hour,
             @RequestBody List<String> seats,
-            Principal principal
+            @AuthenticationPrincipal User user
     ) {
-        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("message", "Authentication required"));
+        if (user == null) return ResponseEntity.status(401).body(Map.of("message", "Authentication required"));
 
         Movie movie = movieService.findById(movieId);
-        if (movie == null) return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Map.of("message", "Movie not found"));
-
-        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
+        if (movie == null) return ResponseEntity.status(404).body(Map.of("message", "Movie not found"));
 
         try {
             ticketService.reserveSeats(user, movie, hour, seats);
             return ResponseEntity.ok(Map.of("message", "Seats reserved temporarily"));
         } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", e.getMessage()));
+            return ResponseEntity.status(409).body(Map.of("message", e.getMessage()));
         }
     }
 
@@ -66,28 +58,23 @@ public class ReservationRestController {
             @PathVariable Long movieId,
             @RequestParam String hour,
             @RequestBody PaymentRequest payment,
-            Principal principal
+            @AuthenticationPrincipal User user
     ) {
-        if (principal == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        if (user == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("message", "Authentication required"));
 
-        User user = (User) ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
         Movie movie = movieService.findById(movieId);
-
         if (movie == null) return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Map.of("message", "Movie not found"));
-
         if (payment.cardName() == null || payment.cardNumber() == null
                 || payment.expiry() == null || payment.cvc() == null
                 || payment.cardName().isBlank() || payment.cardNumber().isBlank()
                 || payment.expiry().isBlank() || payment.cvc().isBlank()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Payment info incomplete"));
         }
-
         if (payment.seats() == null || payment.seats().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "No seats selected"));
         }
-
         try {
             paymentService.processPaymentWithSeats(user, movie, hour, payment.seats(),
                     payment.cardName(), payment.cardNumber(), payment.expiry(), payment.cvc());
@@ -101,6 +88,5 @@ public class ReservationRestController {
                     .body(Map.of("message", "Payment processing failed: " + e.getMessage()));
         }
     }
-
     public record PaymentRequest(String cardName, String cardNumber, String expiry, String cvc, List<String> seats) {}
 }

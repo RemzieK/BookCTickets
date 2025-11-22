@@ -1,13 +1,13 @@
 package com.example.BookCTickets.Authentication;
 
 import com.example.BookCTickets.model.User;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -27,17 +27,21 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerUser(User user) {
-        String rawPassword = user.getPassword();
+    public String registerUser(@ModelAttribute("user") User user, Model model, HttpServletRequest request) {
+        try {
+            String rawPassword = user.getPassword();
+            authService.register(user);
 
-        authService.register(user);
+            request.login(user.getUsername(), rawPassword);
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), rawPassword)
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return "redirect:/index";
+            return "redirect:/index";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "register";
+        } catch (ServletException e) {
+            model.addAttribute("error", "Login failed after registration.");
+            return "register";
+        }
     }
 
     @GetMapping("/login")

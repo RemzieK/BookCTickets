@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -78,11 +77,9 @@ public class AdminController {
         } else {
             movie.setImageUrl(existingImageUrl);
         }
-
         movieService.save(movie);
         return "redirect:/admin?tab=movies";
     }
-
 
     @GetMapping("/movies/delete/{id}")
     public String deleteMovie(@PathVariable Long id){

@@ -11,7 +11,6 @@ import com.example.BookCTickets.model.User;
 
 @Configuration
 public class AdminSetup {
-
     @Bean
     CommandLineRunner createAdmin(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
@@ -25,7 +24,6 @@ public class AdminSetup {
                 admin.setLastName("User");
 
                 userRepository.save(admin);
-                System.out.println("Admin user created!");
             }
         };
     }

@@ -4,7 +4,6 @@ import com.example.BookCTickets.model.Movie;
 import com.example.BookCTickets.repositories.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
