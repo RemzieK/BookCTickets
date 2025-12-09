@@ -37,7 +37,7 @@ public class SecurityConfig {
                                 "/uploads/**", "/assets/**", "/css/**", "/js/**", "/vendor/**", "/images/**"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasAuthority("Admin")
-                        .requestMatchers("/book/**", "/reservation/**").authenticated()
+                        .requestMatchers("/book/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form

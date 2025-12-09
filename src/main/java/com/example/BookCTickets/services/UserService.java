@@ -26,12 +26,10 @@ public class UserService {
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
-
     @Transactional
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
-
     public Map<Long, Integer> getTicketCounts() {
         return findAll().stream()
                 .collect(Collectors.toMap(User::getId, u ->
