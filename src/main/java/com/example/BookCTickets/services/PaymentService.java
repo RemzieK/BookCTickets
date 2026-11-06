@@ -1,7 +1,7 @@
 package com.example.BookCTickets.services;
 
-import com.example.BookCTickets.model.Movie;
 import com.example.BookCTickets.model.Payment;
+import com.example.BookCTickets.model.Screening;
 import com.example.BookCTickets.model.User;
 import com.example.BookCTickets.repositories.PaymentRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,21 +18,18 @@ public class PaymentService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Transactional
-    public void processPaymentWithSeats(User user, Movie movie, String hour, List<String> seats,
+    public void processPaymentWithSeats(User user, Screening screening, List<String> seats,
                                         String cardName, String cardNumber, String expiry, String cvc) {
+        // seats first: if the hold is gone we fail before saving any payment
+        ticketService.confirmPayment(user, screening, seats);
 
-        Payment payment = Payment.builder()
+        paymentRepository.save(Payment.builder()
                 .user(user)
-                .movie(movie)
-                .hour(hour)
+                .screening(screening)
                 .cardName(cardName)
                 .hashedCardNumber(encoder.encode(cardNumber))
                 .hashedExpiry(encoder.encode(expiry))
                 .hashedCvc(encoder.encode(cvc))
-                .build();
-
-        paymentRepository.save(payment);
-
-        ticketService.confirmPayment(user, movie, hour, seats);
+                .build());
     }
 }

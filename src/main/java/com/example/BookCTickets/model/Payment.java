@@ -19,10 +19,7 @@ public class Payment {
     private User user;
 
     @ManyToOne(optional = false)
-    private Movie movie;
-
-    @Column(nullable = false)
-    private String hour;
+    private Screening screening;
 
     @Column(nullable = false)
     private String cardName;

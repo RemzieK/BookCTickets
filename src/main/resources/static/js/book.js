@@ -9,12 +9,40 @@ const rowLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 let selectedHour = null;
 let reservedSeats = [];
+let selectedDate = null;
+
+function formatLocalDate(d) {          // not toISOString(): that is UTC and can be off by a day
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${d.getFullYear()}-${m}-${day}`;
+}
+
+function setupDateInput() {
+    const input = document.getElementById('date-input');
+    const today = new Date();
+    const max = new Date();
+    max.setDate(today.getDate() + 14);
+
+    input.min = formatLocalDate(today);
+    input.max = formatLocalDate(max);
+    input.value = formatLocalDate(today);
+    selectedDate = input.value;
+
+    input.addEventListener('change', () => {
+        if (!input.value) return;
+        selectedDate = input.value;
+        resetSeatMap();
+        updateHourButtons();
+    });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
+    setupDateInput();
     buildSeatGrid();
     setupHourButtons();
 
-    setTimeout(() => document.querySelector('.hour-btn')?.click(), 100);
+    updateHourButtons();
+    setInterval(updateHourButtons, 60000);
 
     setupPaymentModalControls();
     setupPaymentInputEnhancements();
@@ -93,6 +121,25 @@ function handleSeatClick(button) {
     updateSelectionSummary();
 }
 
+function markAsHeld(id) {
+    const btn = document.querySelector(`button[data-seat="${id}"]`);
+    if (!btn) return;
+
+    btn.classList.remove('selected', 'not-selected', 'occupied');
+    btn.classList.add('held');
+    btn.disabled = true;
+}
+
+function showHeldSeats(held) {
+    reservedSeats = held;
+    held.forEach(markAsHeld);
+    document.getElementById('pay-held-btn').style.display = held.length ? 'inline-block' : 'none';
+}
+
+document.getElementById('pay-held-btn').addEventListener('click', () => {
+    document.getElementById('paymentModal').style.display = 'flex';
+});
+
 function updateSelectionSummary() {
     const selected = Array.from(document.querySelectorAll('.seat-btn.selected'))
         .map(b => b.dataset.seat);
@@ -126,22 +173,30 @@ function setupHourButtons() {
 }
 
 async function loadOccupiedSeats() {
-    if (!selectedHour) return;
+    if (!selectedHour || !selectedDate) return;
 
     try {
-        const resp = await fetch(`/reservation/${movieId}/occupied-seats?hour=${encodeURIComponent(selectedHour)}`);
-        const occupiedSeats = await resp.json();
+        const resp = await fetch(`/reservation/${movieId}/occupied-seats?hour=${encodeURIComponent(selectedHour)}&date=${selectedDate}`);
+        if (!resp.ok) {
+            const err = await resp.json().catch(() => ({}));
+            throw new Error(err.message || 'Could not load seats');
+        }
+        const data = await resp.json();
 
-        document.querySelectorAll('.seat-btn.occupied').forEach(btn => {
-            btn.classList.remove('occupied');
+        // reset the seats that were marked from the previous load
+        document.querySelectorAll('.seat-btn.occupied, .seat-btn.held').forEach(btn => {
+            btn.classList.remove('occupied', 'held');
             btn.classList.add('not-selected');
             btn.disabled = false;
         });
 
-        occupiedSeats.forEach(id => markAsOccupied(id));
+        data.taken.forEach(id => markAsOccupied(id));
+        showHeldSeats(data.held);
     } catch (e) {
         console.error(e);
-        alert('Error loading seats.');
+        selectedHour = null;
+        document.querySelectorAll('.hour-btn').forEach(b => b.classList.remove('active-hour'));
+        alert(e.message);
     }
 }
 
@@ -149,26 +204,49 @@ function markAsOccupied(id) {
     const btn = document.querySelector(`button[data-seat="${id}"]`);
     if (!btn) return;
 
-    btn.classList.remove('selected', 'not-selected');
+    btn.classList.remove('selected', 'not-selected', 'held');
     btn.classList.add('occupied');
     btn.disabled = true;
 }
 
 function clearAllSelections() {
     document.querySelectorAll('.seat-btn').forEach(btn => {
-        if (!btn.classList.contains('occupied')) {
+        if (!btn.classList.contains('occupied') && !btn.classList.contains('held')) {
             btn.classList.remove('selected');
             btn.classList.add('not-selected');
             btn.disabled = false;
         }
     });
 
-    reservedSeats = [];
     document.getElementById('selected-seats').textContent = '';
     document.getElementById('total-price').textContent = '';
     document.getElementById('reserve-btn').style.display = 'none';
-
     document.getElementById('paymentModal').style.display = 'none';
+}
+
+function updateHourButtons() {
+    const now = new Date();
+    const isToday = selectedDate === formatLocalDate(now);
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+    document.querySelectorAll('.hour-btn').forEach(btn => {
+        const [h, m] = btn.dataset.hour.split(':').map(Number);
+        btn.disabled = isToday && (h * 60 + m) <= nowMinutes;
+    });
+}
+
+function resetSeatMap() {
+    selectedHour = null;
+    reservedSeats = [];
+    document.getElementById('pay-held-btn').style.display = 'none';
+
+    document.querySelectorAll('.hour-btn').forEach(b => b.classList.remove('active-hour'));
+    document.querySelectorAll('.seat-btn').forEach(btn => {
+        btn.classList.remove('selected', 'occupied', 'held');
+        btn.classList.add('not-selected');
+        btn.disabled = false;
+    });
+    clearAllSelections();
 }
 
 document.getElementById('reserve-btn').addEventListener('click', async () => {
@@ -179,7 +257,7 @@ document.getElementById('reserve-btn').addEventListener('click', async () => {
     if (!selectedHour) return alert('Select a time first.');
 
     try {
-        const resp = await fetch(`/reservation/${movieId}/reserve-seats?hour=${encodeURIComponent(selectedHour)}`, {
+        const resp = await fetch(`/reservation/${movieId}/reserve-seats?hour=${encodeURIComponent(selectedHour)}&date=${selectedDate}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(selected)
@@ -188,27 +266,22 @@ document.getElementById('reserve-btn').addEventListener('click', async () => {
         const result = await resp.json();
         if (!resp.ok) throw new Error(result.message);
 
-        reservedSeats = selected;
-
-        document.getElementById('reserve-btn').style.display = 'none';
-
-        selected.forEach(id => markAsOccupied(id));
+        await loadOccupiedSeats();     // the server now reports these seats as my holds
+        updateSelectionSummary();      // clears the selection text and hides the reserve button
 
         const resModal = document.getElementById('reservationModal');
         resModal.style.display = 'flex';
 
-        document.getElementById('closeReservationModal').addEventListener('click', () => {
+        document.getElementById('closeReservationModal').onclick = () => {
             resModal.style.display = 'none';
-        });
-
-        window.addEventListener('click', e => {
-            if (e.target === resModal) resModal.style.display = 'none';
-        });
-
-        document.getElementById('goToPaymentBtn').addEventListener('click', () => {
+        };
+        document.getElementById('goToPaymentBtn').onclick = () => {
             resModal.style.display = 'none';
             document.getElementById('paymentModal').style.display = 'flex';
-        });
+        };
+        window.onclick = e => {
+            if (e.target === resModal) resModal.style.display = 'none';
+        };
 
     } catch (e) {
         alert('Error: ' + e.message);
@@ -253,7 +326,7 @@ document.getElementById('buy-btn').addEventListener('click', async () => {
             seats: reservedSeats
         };
 
-        const resp = await fetch(`/reservation/${movieId}/confirm-payment?hour=${encodeURIComponent(selectedHour)}`, {
+        const resp = await fetch(`/reservation/${movieId}/confirm-payment?hour=${encodeURIComponent(selectedHour)}&date=${selectedDate}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(paymentData)
@@ -323,8 +396,6 @@ function showSuccessAnimation() {
         </div>
     `;
 
-    setTimeout(() => {
-        modal.style.display = "none";
-    }, 2000);
+    setTimeout(() => location.reload(), 2000);
 }
 

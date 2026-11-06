@@ -32,8 +32,5 @@ public class Movie {
     private String imageUrl;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE)
-    private List<Payment> payments;
-
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE)
-    private List<Ticket> tickets;
+    private List<Screening> screenings;
 }

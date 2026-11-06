@@ -21,6 +21,9 @@
     <div class="booking-container">
         <h1 th:text="'Select seats for ' + ${movie.title}">Select the seats</h1>
 
+        <h2>Select Date:</h2>
+        <input type="date" id="date-input" class="date-input">
+
         <h2>Select Time:</h2>
         <div class="hour-buttons">
             <button th:each="h : ${hours}" type="button" class="hour-btn"
@@ -52,6 +55,7 @@
 
         <div class="container">
             <button id="reserve-btn" class="reserve-btn">Reserve Seats</button>
+            <button id="pay-held-btn" class="reserve-btn" style="display:none">Continue to payment</button>
             <div id="result">
                 <p id="selected-seats"></p>
                 <p id="total-price"></p>

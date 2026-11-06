@@ -64,7 +64,7 @@
                         <td th:text="${user.id}"></td>
                         <td th:text="${user.username}"></td>
                         <td th:text="${user.email}"></td>
-                        <td th:text="${ticketCounts[user.id]}">0</td>
+                        <td th:text="${ticketCounts[user.id] ?: 0}">0</td>
                         <td th:text="${user.role}"></td>
                         <td>
                             <a th:href="@{'/admin/users/delete/' + ${user.id}}" class="btn-delete">Delete</a>

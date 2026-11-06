@@ -2,14 +2,15 @@ package com.example.BookCTickets.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
 
-@Data
+@Getter @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "tickets", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"movie_id", "hour", "seat", "room"})
+        @UniqueConstraint(columnNames = {"screening_id", "seat"})
 })
 public class Ticket {
 
@@ -22,21 +23,18 @@ public class Ticket {
     private User user;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "movie_id")
-    private Movie movie;
+    @JoinColumn(name = "screening_id")
+    private Screening screening;
 
     @Column(nullable = false)
     private String seat;
 
     @Column(nullable = false)
-    private String hour;
-
-    @Column(nullable = false)
-    private String room;
-
-    @Column(nullable = false)
     private Double price;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean paid = false;
+
+    private LocalDateTime reservedAt;
 }

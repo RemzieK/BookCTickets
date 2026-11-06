@@ -5,14 +5,13 @@ import com.example.BookCTickets.repositories.TicketRepository;
 import com.example.BookCTickets.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+
 
 @Service
 @RequiredArgsConstructor
@@ -31,9 +30,10 @@ public class UserService {
         userRepository.deleteById(id);
     }
     public Map<Long, Integer> getTicketCounts() {
-        return findAll().stream()
-                .collect(Collectors.toMap(User::getId, u ->
-                        ticketRepository.findByUser(u).size()
-                ));
+        Map<Long, Integer> counts = new HashMap<>();
+        for (Object[] row : ticketRepository.countPaidByUser()) {
+            counts.put((Long) row[0], ((Long) row[1]).intValue());
+        }
+        return counts;
     }
 }
