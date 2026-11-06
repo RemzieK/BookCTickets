@@ -65,3 +65,4 @@ logs/
 
 # Local config with DB credentials
 src/main/resources/application.properties
+
