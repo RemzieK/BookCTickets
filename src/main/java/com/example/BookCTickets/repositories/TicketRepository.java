@@ -38,6 +38,10 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query("DELETE FROM Ticket t WHERE t.screening.id = :screeningId AND t.paid = false AND t.reservedAt < :cutoff")
     void deleteExpiredHolds(@Param("screeningId") Long screeningId, @Param("cutoff") LocalDateTime cutoff);
 
+    @Modifying
+    @Query("DELETE FROM Ticket t WHERE t.paid = false AND t.reservedAt < :cutoff")
+    int deleteAllExpiredHolds(@Param("cutoff") LocalDateTime cutoff);
+
     @Query("SELECT t.user.id, COUNT(t) FROM Ticket t WHERE t.paid = true GROUP BY t.user.id")
     List<Object[]> countPaidByUser();
 

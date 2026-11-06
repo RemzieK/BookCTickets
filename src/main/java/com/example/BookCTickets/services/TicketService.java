@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TicketService {
-    private static final int HOLD_MINUTES = 10;
+    public static final int HOLD_MINUTES = 10;
     private static final int MAX_SEATS = 10;
     private static final String SEAT_PATTERN = "^[A-F]([1-9]|1[0-8])$";   // rows A-F, seats 1-18
 
