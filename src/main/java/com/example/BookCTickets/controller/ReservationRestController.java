@@ -97,15 +97,24 @@ public class ReservationRestController {
         if (payment.seats() == null || payment.seats().isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "No seats selected"));
         }
+        String digits = payment.cardNumber().replaceAll("\\s", "");
+        if (!digits.matches("\\d{16}"))
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid card number"));
+        if (!payment.expiry().matches("\\d{2}/\\d{2}"))
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid expiry"));
+        if (!payment.cvc().matches("\\d{3,4}"))
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid CVC"));
+
+        String last4 = digits.substring(12);
+
         try {
             Screening screening = screeningService.getOrCreate(movie, date, hour);
             paymentService.processPaymentWithSeats(user, screening, payment.seats(),
-                    payment.cardName(), payment.cardNumber(), payment.expiry(), payment.cvc());
+                    payment.cardName().trim(), last4);
 
-            String number = payment.cardNumber();
             return ResponseEntity.ok(Map.of(
                     "message", "Payment successful! Your booking is confirmed.",
-                    "card", "**** **** **** " + number.substring(Math.max(0, number.length() - 4))
+                    "card", "**** **** **** " + last4
             ));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));

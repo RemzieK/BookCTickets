@@ -24,12 +24,6 @@ public class Payment {
     @Column(nullable = false)
     private String cardName;
 
-    @Column(nullable = false)
-    private String hashedCardNumber;
-
-    @Column(nullable = false)
-    private String hashedExpiry;
-
-    @Column(nullable = false)
-    private String hashedCvc;
+    @Column(nullable = false, length = 4)
+    private String cardLast4;
 }
