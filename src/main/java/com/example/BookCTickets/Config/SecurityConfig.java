@@ -10,6 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
 public class SecurityConfig {
@@ -29,19 +32,28 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomLoginSuccessHandler successHandler, JwtAuthFilter jwtAuthFilter) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   CustomLoginSuccessHandler successHandler,
+                                                   JwtAuthFilter jwtAuthFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/", "/index", "/about", "/movies/**", "/register", "/login",
+                                "/", "/index", "/about", "/movies/**", "/register", "/login", "/error",
+                                "/favicon.ico", "/api/auth/**",
                                 "/uploads/**", "/assets/**", "/css/**", "/js/**", "/vendor/**", "/images/**"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasAuthority("Admin")
-                        .requestMatchers("/book/**").authenticated()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/book/**", "/reservation/**").authenticated()
+                        .anyRequest().authenticated()
                 )
+                .exceptionHandling(ex -> ex.defaultAuthenticationEntryPointFor(
+                        new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+                        (RequestMatcher) request -> {
+                            String path = request.getServletPath();
+                            return path.startsWith("/reservation") || path.startsWith("/api");
+                        }))
                 .formLogin(form -> form
                         .loginPage("/login")
                         .successHandler(successHandler)
